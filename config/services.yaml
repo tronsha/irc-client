@@ -25,3 +25,8 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\IrcService:
+        arguments:
+            $server: 'chat.freenode.net'
+            $port: 6667

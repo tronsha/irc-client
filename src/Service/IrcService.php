@@ -15,12 +15,29 @@ class IrcService
         $this->port = $port;
     }
 
-    public function run($output)
+    public function run($outputStream)
     {
-        $output->writeln([
-            __CLASS__,
-            $this->server,
-            $this->port,
-        ]);
+        try {
+            $ip = gethostbyname($this->server);
+            $fp = fsockopen($ip, $this->port, $errno, $errstr);
+            fwrite($fp, 'USER Cerberus * * : Cerberus' . PHP_EOL);
+            fwrite($fp, 'NICK Cerber' . PHP_EOL);
+            while (!feof($fp)) {
+                $input = fgets($fp, 4096);
+                if (is_string($input)) {
+                    if (':' !== substr($input, 0, 1)) {
+                        if (false !== strpos(strtoupper($input), 'PING')) {
+                            $output = str_replace('PING', 'PONG', $input);
+                            fwrite($fp, $output . PHP_EOL);
+                        }
+                    }
+                    $outputStream->writeln([
+                        trim($input),
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }

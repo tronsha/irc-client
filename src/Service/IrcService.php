@@ -6,29 +6,27 @@ namespace App\Service;
 
 class IrcService
 {
-    private $server;
-    private $port;
+    private $ircServerName;
+    private $ircServerPort;
+    private $ircServerConnection;
 
     public function __construct($server, $port)
     {
-        $this->server = $server;
-        $this->port = $port;
+        $this->ircServerName = $server;
+        $this->ircServerPort = $port;
     }
 
     public function run($outputStream)
     {
         try {
-            $ip = gethostbyname($this->server);
-            $fp = fsockopen($ip, $this->port, $errno, $errstr);
-            fwrite($fp, 'USER Cerberus * * : Cerberus' . PHP_EOL);
-            fwrite($fp, 'NICK Cerber' . PHP_EOL);
-            while (!feof($fp)) {
-                $input = fgets($fp, 4096);
+            $this->connect();
+            while (!feof($this->ircServerConnection)) {
+                $input = fgets($this->ircServerConnection, 4096);
                 if (is_string($input)) {
                     if (':' !== substr($input, 0, 1)) {
                         if (false !== strpos(strtoupper($input), 'PING')) {
                             $output = str_replace('PING', 'PONG', $input);
-                            fwrite($fp, $output . PHP_EOL);
+                            fwrite($this->ircServerConnection, $output . PHP_EOL);
                         }
                     }
                     $outputStream->writeln([
@@ -39,5 +37,13 @@ class IrcService
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    private function connect()
+    {
+        $ircServerIp = gethostbyname($this->ircServerName);
+        $this->ircServerConnection = fsockopen($ircServerIp, $this->ircServerPort, $errorNumber, $errorString);
+        fwrite($this->ircServerConnection, 'USER Cerberus * * : Cerberus' . PHP_EOL);
+        fwrite($this->ircServerConnection, 'NICK Cerber' . PHP_EOL);
     }
 }

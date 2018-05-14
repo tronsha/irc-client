@@ -9,14 +9,16 @@ class IrcService
     private $ircServerName;
     private $ircServerPort;
     private $ircServerConnection;
+    private $outputService;
 
-    public function __construct($server, $port)
+    public function __construct($server, $port, OutputService $outputService)
     {
         $this->ircServerName = $server;
         $this->ircServerPort = $port;
+        $this->outputService = $outputService;
     }
 
-    public function run($outputStream)
+    public function run()
     {
         try {
             $this->connect();
@@ -29,9 +31,7 @@ class IrcService
                             fwrite($this->ircServerConnection, $output . PHP_EOL);
                         }
                     }
-                    $outputStream->writeln([
-                        trim($input),
-                    ]);
+                    $this->outputService->write(trim($input));
                 }
             }
         } catch (\Exception $e) {

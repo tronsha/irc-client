@@ -22,16 +22,17 @@ class IrcService
     {
         try {
             $this->connect();
-            while (!feof($this->ircServerConnection)) {
+            while (false === feof($this->ircServerConnection)) {
                 $input = fgets($this->ircServerConnection, 4096);
-                if (is_string($input)) {
+                if (true === is_string($input) && '' !== $input) {
+                    $input = trim($input);
                     if (':' !== substr($input, 0, 1)) {
                         if (false !== strpos(strtoupper($input), 'PING')) {
                             $output = str_replace('PING', 'PONG', $input);
                             fwrite($this->ircServerConnection, $output . PHP_EOL);
                         }
                     }
-                    $this->outputService->write(trim($input));
+                    $this->outputService->write($input);
                 }
             }
         } catch (\Exception $e) {

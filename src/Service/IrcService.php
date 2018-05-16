@@ -21,7 +21,7 @@ class IrcService
     public function run()
     {
         try {
-            $this->connect();
+            $this->connectToServer();
             while (false === feof($this->ircServerConnection)) {
                 $input = fgets($this->ircServerConnection, 4096);
                 if (true === is_string($input) && '' !== $input) {
@@ -40,11 +40,22 @@ class IrcService
         }
     }
 
-    private function connect()
+    private function connectToServer()
     {
+        $errorString = '';
+        $errorNumber = 0;
         $ircServerIp = gethostbyname($this->ircServerName);
         $this->ircServerConnection = fsockopen($ircServerIp, $this->ircServerPort, $errorNumber, $errorString);
-        fwrite($this->ircServerConnection, 'USER Cerberus * * : Cerberus' . PHP_EOL);
-        fwrite($this->ircServerConnection, 'NICK Cerber' . PHP_EOL);
+        if (false === $this->ircServerConnection) {
+            throw new Exception($errorString);
+        } else {
+            $this->writeToServer('USER Cerberus * * : Cerberus');
+            $this->writeToServer('NICK Cerber');
+        }
+    }
+    
+    private function writeToServer($text) 
+    {
+        fwrite($this->ircServerConnection, $text . PHP_EOL);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -9,15 +9,16 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 class OutputService
 {
     /**
-     * @var OutputInterface 
+     * @var OutputInterface
      */
     private $output;
-    
+
     /**
      * @param OutputInterface $output
      */
-    public function __construct() {
-        $this->output = new ConsoleOutput;
+    public function __construct()
+    {
+        $this->output = new ConsoleOutput();
     }
 
     /**
@@ -29,5 +30,4 @@ class OutputService
             $text,
         ]);
     }
-
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -53,8 +53,8 @@ class IrcService
             $this->writeToServer('NICK Cerber');
         }
     }
-    
-    private function writeToServer($text) 
+
+    private function writeToServer($text)
     {
         fwrite($this->ircServerConnection, $text . PHP_EOL);
     }

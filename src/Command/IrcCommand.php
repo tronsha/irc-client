@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Command;
 
 use App\Service\IrcService;
@@ -13,7 +14,7 @@ class IrcCommand extends Command
         $this->irc = $irc;
         parent::__construct();
     }
-    
+
     protected function configure()
     {
         $this->setName('irc:run');

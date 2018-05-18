@@ -11,7 +11,7 @@ class IrcService
     private $ircServerConnection;
     private $outputService;
 
-    public function __construct($server, $port, OutputService $outputService)
+    public function __construct(string $server, int $port, OutputService $outputService)
     {
         $this->ircServerName = $server;
         $this->ircServerPort = $port;

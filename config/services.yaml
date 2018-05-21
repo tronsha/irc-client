@@ -27,6 +27,5 @@ services:
     # please note that last definitions always *replace* previous ones
 
     App\Service\IrcService:
-        arguments:
-            $server: 'chat.freenode.net'
-            $port: 6667
+        calls:
+            - [setIrcServer, ['chat.freenode.net', 6667]]

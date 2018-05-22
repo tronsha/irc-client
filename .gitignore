@@ -40,6 +40,10 @@
 # Backup entities generated with doctrine:generate:entities command
 **/Entity/*~
 
+/nbproject/
+/composer.lock
+/symfony.lock
+
 ###> symfony/framework-bundle ###
 /.env
 /public/bundles/
@@ -47,6 +51,7 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-/nbproject/private/
-
-/*.lock
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php_cs.cache
+###< friendsofphp/php-cs-fixer ###

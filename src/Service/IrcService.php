@@ -23,7 +23,7 @@ class IrcService
         $this->ircServerPort = $port;
         $this->ircServerPassword = $password;
     }
-    
+
     public function run()
     {
         try {

@@ -11,6 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class IrcCommand extends Command
 {
+    private $irc;
+
     public function __construct(IrcService $irc)
     {
         $this->irc = $irc;

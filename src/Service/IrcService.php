@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Exception\CouldNotConnectException;
+
 class IrcService
 {
     private $ircServerName;
@@ -56,7 +58,7 @@ class IrcService
         $this->ircServerConnection = fsockopen($ircServerIp, $this->ircServerPort, $errorNumber, $errorString);
 
         if (false === $this->ircServerConnection) {
-            throw new Exception($errorString);
+            throw new CouldNotConnectException($errorString);
         }
 
         if (null !== $this->ircServerPassword) {

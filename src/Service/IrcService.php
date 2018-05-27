@@ -31,17 +31,7 @@ class IrcService
         try {
             $this->connectToServer();
             while (false === feof($this->ircServerConnection)) {
-                $input = fgets($this->ircServerConnection, 4096);
-                if (true === is_string($input) && '' !== $input) {
-                    $input = trim($input);
-                    if (':' !== substr($input, 0, 1)) {
-                        if (false !== strpos(strtoupper($input), 'PING')) {
-                            $output = str_replace('PING', 'PONG', $input);
-                            fwrite($this->ircServerConnection, $output . PHP_EOL);
-                        }
-                    }
-                    $this->outputService->write($input);
-                }
+                $this->readFromServer();
             }
         } catch (\Exception $e) {
             echo $e->getMessage();
@@ -67,6 +57,21 @@ class IrcService
 
         $this->writeToServer('USER Cerberus * * : Cerberus');
         $this->writeToServer('NICK Cerber');
+    }
+
+    private function readFromServer()
+    {
+        $input = fgets($this->ircServerConnection, 4096);
+        if (true === is_string($input) && '' !== $input) {
+            $input = trim($input);
+            if (':' !== substr($input, 0, 1)) {
+                if (false !== strpos(strtoupper($input), 'PING')) {
+                    $output = str_replace('PING', 'PONG', $input);
+                    $this->writeToServer($output);
+                }
+            }
+            $this->outputService->write($input);
+        }
     }
 
     private function writeToServer($text)

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Exception\CouldNotConnectException;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class IrcService
 {
@@ -17,6 +18,8 @@ class IrcService
     public function __construct(OutputService $outputService)
     {
         $this->outputService = $outputService;
+        $this->dispatcher = new EventDispatcher();
+        $this->dispatcher->addSubscriber(new \App\EventListener\IrcEventSubscriber());
     }
 
     public function setIrcServer(string $server, int $port, string $password = null)
@@ -62,6 +65,11 @@ class IrcService
     private function readFromServer()
     {
         $input = fgets($this->ircServerConnection, 4096);
+        
+        
+        $this->dispatcher->dispatch('irc', new \App\Event\IrcEvent464($input));
+        
+        
         if (true === is_string($input) && '' !== $input) {
             $input = trim($input);
             if (':' !== substr($input, 0, 1)) {

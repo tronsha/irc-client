@@ -6,19 +6,19 @@ namespace App\Service;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class OutputService
+class ConsoleService
 {
     /**
      * @var OutputInterface
      */
-    private $output;
+    private $consoleOutput;
 
     /**
      * @param OutputInterface $output
      */
     public function __construct()
     {
-        $this->output = new ConsoleOutput();
+        $this->consoleOutput = new ConsoleOutput();
     }
 
     /**
@@ -26,7 +26,7 @@ class OutputService
      */
     public function write(string $text)
     {
-        $this->output->writeln([
+        $this->consoleOutput->writeln([
             $text,
         ]);
     }

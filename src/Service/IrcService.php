@@ -13,11 +13,11 @@ class IrcService
     private $ircServerPort;
     private $ircServerPassword;
     private $ircServerConnection;
-    private $outputService;
+    private $consoleService;
 
-    public function __construct(OutputService $outputService)
+    public function __construct(ConsoleService $consoleService)
     {
-        $this->outputService = $outputService;
+        $this->consoleService = $consoleService;
         $this->dispatcher = new EventDispatcher();
         $this->dispatcher->addSubscriber(new \App\EventListener\IrcEventSubscriber());
     }
@@ -78,7 +78,7 @@ class IrcService
                     $this->writeToServer($output);
                 }
             }
-            $this->outputService->write($input);
+            $this->consoleService->write($input);
         }
     }
 

@@ -11,11 +11,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class IrcCommand extends Command
 {
-    private $irc;
+    private $ircService;
 
-    public function __construct(IrcService $irc)
+    public function __construct(IrcService $ircService)
     {
-        $this->irc = $irc;
+        $this->ircService = $ircService;
         parent::__construct();
     }
 
@@ -26,6 +26,13 @@ class IrcCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->irc->run($output);
+        try {
+            $ircServerConnection = $this->ircService->connectToServer();
+            while (false === feof($ircServerConnection)) {
+                $this->ircService->readFromServer();
+            }
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }

@@ -29,19 +29,7 @@ class IrcService
         $this->ircServerPassword = $password;
     }
 
-    public function run()
-    {
-        try {
-            $this->connectToServer();
-            while (false === feof($this->ircServerConnection)) {
-                $this->readFromServer();
-            }
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    private function connectToServer()
+    public function connectToServer()
     {
         $errorString = '';
         $errorNumber = 0;
@@ -60,9 +48,11 @@ class IrcService
 
         $this->writeToServer('USER Cerberus * * : Cerberus');
         $this->writeToServer('NICK Cerber');
+        
+        return $this->ircServerConnection;
     }
 
-    private function readFromServer()
+    public function readFromServer()
     {
         $input = fgets($this->ircServerConnection, 4096);
         
@@ -82,7 +72,7 @@ class IrcService
         }
     }
 
-    private function writeToServer($text)
+    public function writeToServer($text)
     {
         fwrite($this->ircServerConnection, $text . PHP_EOL);
     }

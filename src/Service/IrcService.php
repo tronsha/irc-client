@@ -13,14 +13,6 @@ class IrcService
     private $ircServerPort;
     private $ircServerPassword;
     private $ircServerConnection;
-    private $consoleService;
-
-    public function __construct(ConsoleService $consoleService)
-    {
-        $this->consoleService = $consoleService;
-        $this->dispatcher = new EventDispatcher();
-        $this->dispatcher->addSubscriber(new \App\EventListener\IrcEventSubscriber());
-    }
 
     public function setIrcServer(string $server, int $port, string $password = null)
     {
@@ -52,24 +44,9 @@ class IrcService
         return $this->ircServerConnection;
     }
 
-    public function readFromServer()
+    public function readFromServer(): string
     {
-        $input = fgets($this->ircServerConnection, 4096);
-        
-        
-        $this->dispatcher->dispatch('irc', new \App\Event\IrcEvent464($input));
-        
-        
-        if (true === is_string($input) && '' !== $input) {
-            $input = trim($input);
-            if (':' !== substr($input, 0, 1)) {
-                if (false !== strpos(strtoupper($input), 'PING')) {
-                    $output = str_replace('PING', 'PONG', $input);
-                    $this->writeToServer($output);
-                }
-            }
-            $this->consoleService->write($input);
-        }
+        return fgets($this->ircServerConnection, 4096);
     }
 
     public function writeToServer($text)

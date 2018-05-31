@@ -16,7 +16,7 @@ class IrcEvent464 extends Event
 
     public function run()
     {
-        var_dump($this->input);
-        die(PHP_EOL);
+//        var_dump($this->input);
+//        die(PHP_EOL);
     }
 }

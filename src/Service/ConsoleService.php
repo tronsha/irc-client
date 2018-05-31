@@ -14,7 +14,7 @@ class ConsoleService
     private $consoleOutput;
 
     /**
-     * @param OutputInterface $output
+     * ConsoleService constructor.
      */
     public function __construct()
     {
@@ -24,7 +24,7 @@ class ConsoleService
     /**
      * @param string $text
      */
-    public function write(string $text)
+    public function writeToConsole(string $text)
     {
         $this->consoleOutput->writeln([
             $text,

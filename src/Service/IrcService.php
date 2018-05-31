@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Exception\CouldNotConnectException;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class IrcService
 {
@@ -21,7 +20,7 @@ class IrcService
         $this->ircServerPassword = $password;
     }
 
-    public function connectToServer()
+    public function connectToIrcServer()
     {
         $errorString = '';
         $errorNumber = 0;
@@ -35,21 +34,21 @@ class IrcService
         }
 
         if (null !== $this->ircServerPassword) {
-            $this->writeToServer('PASS ' . $this->ircServerPassword);
+            $this->writeToIrcServer('PASS ' . $this->ircServerPassword);
         }
 
-        $this->writeToServer('USER Cerberus * * : Cerberus');
-        $this->writeToServer('NICK Cerber');
-        
+        $this->writeToIrcServer('USER Cerberus * * : Cerberus');
+        $this->writeToIrcServer('NICK Cerber');
+
         return $this->ircServerConnection;
     }
 
-    public function readFromServer(): string
+    public function readFromIrcServer(): string
     {
-        return fgets($this->ircServerConnection, 4096);
+        return trim((string) fgets($this->ircServerConnection, 4096));
     }
 
-    public function writeToServer($text)
+    public function writeToIrcServer($text)
     {
         fwrite($this->ircServerConnection, $text . PHP_EOL);
     }

@@ -6,11 +6,11 @@ namespace App\Command;
 
 use App\Service\IrcService;
 use App\Service\ConsoleService;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-
 
 class IrcCommand extends Command
 {
@@ -35,21 +35,20 @@ class IrcCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $ircServerConnection = $this->ircService->connectToServer();
+            $ircServerConnection = $this->ircService->connectToIrcServer();
             while (false === feof($ircServerConnection)) {
-                $inputFromServer = $this->ircService->readFromServer();
-                if (true === is_string($inputFromServer) && '' !== $inputFromServer) {
-                    $inputFromServer = trim($inputFromServer);
-                    $this->consoleService->write($inputFromServer);
+                $inputFromServer = $this->ircService->readFromIrcServer();
+                if ('' !== $inputFromServer) {
+                    $this->consoleService->writeToConsole($inputFromServer);
                     if (':' !== substr($inputFromServer, 0, 1)) {
                         if (false !== strpos(strtoupper($inputFromServer), 'PING')) {
                             $output = str_replace('PING', 'PONG', $inputFromServer);
-                            $this->ircService->writeToServer($output);
+                            $this->ircService->writeToIrcServer($output);
                         }
                     }
                 }
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             echo $exception->getMessage();
         }
     }

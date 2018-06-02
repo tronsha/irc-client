@@ -8,8 +8,7 @@ class IrcEvent464 extends Event
 {
     private $input;
 
-
-    public function __construct($input) 
+    public function __construct($input)
     {
         $this->input = $input;
     }

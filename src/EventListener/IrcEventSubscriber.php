@@ -7,9 +7,6 @@ namespace App\EventListener;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-/**
- * 
- */
 class IrcEventSubscriber implements EventSubscriberInterface
 {
     public function onIrcEvent(Event $event)

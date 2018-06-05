@@ -5,17 +5,18 @@
     "description": "",
     "require": {
         "php": "^7.1.3",
+        "ext-ctype": "*",
         "ext-iconv": "*",
-        "symfony/console": "^4.0",
+        "symfony/console": "^4.1",
         "symfony/flex": "^1.0",
-        "symfony/framework-bundle": "^4.0",
+        "symfony/framework-bundle": "^4.1",
         "symfony/lts": "^4@dev",
-        "symfony/yaml": "^4.0"
+        "symfony/yaml": "^4.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.11",
-        "symfony/dotenv": "^4.0",
-        "symfony/phpunit-bridge": "^4.0"
+        "symfony/dotenv": "^4.1",
+        "symfony/phpunit-bridge": "^4.1"
     },
     "config": {
         "preferred-install": {
@@ -34,6 +35,7 @@
         }
     },
     "replace": {
+        "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
         "symfony/polyfill-php71": "*",
         "symfony/polyfill-php70": "*",
@@ -42,7 +44,7 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"

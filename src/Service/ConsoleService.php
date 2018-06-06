@@ -21,13 +21,18 @@ class ConsoleService
         $this->consoleOutput = new ConsoleOutput();
     }
 
+    public function setOutput($output)
+    {
+        $this->consoleOutput = $output;
+
+        return $this;
+    }
+
     /**
      * @param string $text
      */
     public function writeToConsole(string $text)
     {
-        $this->consoleOutput->writeln([
-            $text,
-        ]);
+        $this->consoleOutput->writeln($text);
     }
 }

@@ -4,27 +4,94 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Service\Irc\InputHandler;
 use App\Service\IrcService;
 use App\Service\ConsoleService;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class IrcCommand extends Command
 {
+    /**
+     * @var ConsoleService
+     */
     private $consoleService;
+
+    /**
+     * @var InputHandler
+     */
+    private $inputHandler;
+
+    /**
+     * @var IrcService
+     */
     private $ircService;
 
-    public function __construct(IrcService $ircService, ConsoleService $consoleService)
+    /**
+     * @return ConsoleService
+     */
+    public function getConsoleService(): ConsoleService
+    {
+        return $this->consoleService;
+    }
+
+    /**
+     * @param ConsoleService $consoleService
+     * @return IrcCommand
+     */
+    public function setConsoleService(ConsoleService $consoleService): IrcCommand
     {
         $this->consoleService = $consoleService;
+
+        return $this;
+    }
+
+    /**
+     * @return InputHandler
+     */
+    public function getInputHandler(): InputHandler
+    {
+        return $this->inputHandler;
+    }
+
+    /**
+     * @param InputHandler $inputHandler
+     * @return IrcCommand
+     */
+    public function setInputHandler(InputHandler $inputHandler): IrcCommand
+    {
+        $this->inputHandler = $inputHandler;
+
+        return $this;
+    }
+
+    /**
+     * @return IrcService
+     */
+    public function getIrcService(): IrcService
+    {
+        return $this->ircService;
+    }
+
+    /**
+     * @param IrcService $ircService
+     * @return IrcCommand
+     */
+    public function setIrcService(IrcService $ircService): IrcCommand
+    {
         $this->ircService = $ircService;
+
+        return $this;
+    }
+
+    public function __construct(IrcService $ircService, ConsoleService $consoleService, InputHandler $inputHandler)
+    {
+        $this->setConsoleService($consoleService);
+        $this->setInputHandler($inputHandler);
+        $this->setIrcService($ircService);
         parent::__construct();
-//        $this->dispatcher = new EventDispatcher();
-//        $this->dispatcher->addSubscriber(new \App\EventListener\IrcEventSubscriber());
-//        $this->dispatcher->dispatch('irc', new \App\Event\IrcEvent464('foo'));
     }
 
     protected function configure()
@@ -35,21 +102,18 @@ class IrcCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $ircServerConnection = $this->ircService->connectToIrcServer();
+            $this->getConsoleService()->setOutput($output);
+            $this->getInputHandler()
+                ->setConsoleService($this->getConsoleService())
+                ->setIrcService($this->getIrcService())
+                ->setOptions($input->getOptions());
+            $ircServerConnection = $this->getIrcService()->connectToIrcServer();
             while (false === feof($ircServerConnection)) {
-                $inputFromServer = $this->ircService->readFromIrcServer();
-                if ('' !== $inputFromServer) {
-                    $this->consoleService->writeToConsole($inputFromServer);
-                    if (':' !== substr($inputFromServer, 0, 1)) {
-                        if (false !== strpos(strtoupper($inputFromServer), 'PING')) {
-                            $output = str_replace('PING', 'PONG', $inputFromServer);
-                            $this->ircService->writeToIrcServer($output);
-                        }
-                    }
-                }
+                $inputFromServer = $this->getIrcService()->readFromIrcServer();
+                $this->getInputHandler()->handle($inputFromServer);
             }
         } catch (Exception $exception) {
-            echo $exception->getMessage();
+            $this->getConsoleService()->writeToConsole($exception->getMessage());
         }
     }
 }

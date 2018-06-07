@@ -113,7 +113,7 @@ class IrcCommand extends Command
                 $this->getInputHandler()->handle($inputFromServer);
             }
         } catch (Exception $exception) {
-            $this->getConsoleService()->writeToConsole($exception->getMessage());
+            $this->getConsoleService()->writeToConsole('<error>' . $exception->getMessage() . '</error>');
         }
     }
 }

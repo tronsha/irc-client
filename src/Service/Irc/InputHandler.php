@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Irc;
 
+use App\Exception\IrcException;
 use App\Service\ConsoleService;
 use App\Service\IrcService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -102,17 +103,44 @@ class InputHandler
 
     public function handle($input)
     {
-        if ('' !== $input) {
-            if (':' !== substr($input, 0, 1)) {
-                if (false !== strpos(strtoupper($input), 'PING')) {
-                    $output = str_replace('PING', 'PONG', $input);
-                    $this->getIrcService()->writeToIrcServer($output);
+        try {
+            if ('' !== $input) {
+                if (':' === substr($input, 0, 1)) {
+                    $this->colonInput($input);
+                } else {
+                    $this->nonColonInput($input);
+                }
+
+                if (true === $this->getOptions()['verbose']) {
+                    $this->getConsoleService()->writeToConsole($input);
                 }
             }
+        } catch (IrcException $exception) {
+            $this->getConsoleService()->writeToConsole('<error>' . $exception->getMessage() . '</error>');
+        }
+    }
 
-            if (true === $this->getOptions()['verbose']) {
-                $this->getConsoleService()->writeToConsole($input);
-            }
+    /**
+     * @param string $input
+     */
+    private function colonInput($input)
+    {
+
+    }
+
+    /**
+     * @param string $input
+     *
+     * @throws IrcException
+     */
+    private function nonColonInput($input)
+    {
+        if (false !== strpos(strtoupper($input), 'PING')) {
+            $output = str_replace('PING', 'PONG', $input);
+            $this->getIrcService()->writeToIrcServer($output);
+        }
+        if (false !== strpos(strtoupper($input), 'ERROR')) {
+            throw new IrcException($input);
         }
     }
 }

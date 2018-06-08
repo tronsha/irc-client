@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service\Irc;
 
+use App\EventListener\IrcEventSubscriber;
+use App\Exception\IrcEventClassNotExistsException;
 use App\Exception\IrcException;
 use App\Service\ConsoleService;
 use App\Service\IrcService;
@@ -26,11 +28,15 @@ class InputHandler
      */
     private $consoleService;
 
+    /**
+     * @var EventDispatcher
+     */
+    private $dispatcher;
+
     public function __construct()
     {
-//        $this->dispatcher = new EventDispatcher();
-//        $this->dispatcher->addSubscriber(new \App\EventListener\IrcEventSubscriber());
-//        $this->dispatcher->dispatch('irc', new \App\Event\IrcEvent464('foo'));
+        $this->dispatcher = new EventDispatcher();
+        $this->dispatcher->addSubscriber(new IrcEventSubscriber());
     }
 
     /**
@@ -125,7 +131,20 @@ class InputHandler
      */
     private function colonInput($input)
     {
-
+        preg_match(
+            "/^\:(?:([^\!\ \:]+)\!)?([^\!\ ]+)\ ([^\ ]+)(?:\ ([^\:].*?))?(?:\ \:(.*?))?(?:\r)?$/i",
+            $input,
+            $data
+        );
+        try {
+            $eventClass = '\\App\\Event\\IrcEvent' . $data[3];
+            if (false === class_exists($eventClass)) {
+                throw new IrcEventClassNotExistsException('Class "' . $eventClass . '" not exists');
+            }
+            $this->dispatcher->dispatch('irc', new $eventClass($data));
+        } catch (IrcEventClassNotExistsException $exception) {
+            $this->getConsoleService()->writeToConsole('<error>' . $exception->getMessage() . '</error>');
+        }
     }
 
     /**

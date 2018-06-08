@@ -11,7 +11,7 @@ class IrcEventSubscriber implements EventSubscriberInterface
 {
     public function onIrcEvent(Event $event)
     {
-        $event->run();
+        $event->handle();
     }
 
     public static function getSubscribedEvents()

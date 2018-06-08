@@ -6,16 +6,14 @@ use Symfony\Component\EventDispatcher\Event;
 
 class IrcEvent464 extends Event
 {
-    private $input;
+    private $data;
 
-    public function __construct($input)
+    public function __construct($data)
     {
-        $this->input = $input;
+        $this->data = $data;
     }
 
-    public function run()
+    public function handle()
     {
-//        var_dump($this->input);
-//        die(PHP_EOL);
     }
 }

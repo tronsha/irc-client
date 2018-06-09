@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service\Irc;
 
+use App\Component\EventDispatcher\EventDispatcher;
 use App\EventListener\IrcEventSubscriber;
 use App\Exception\IrcEventClassNotExistsException;
 use App\Exception\IrcException;
 use App\Service\ConsoleService;
 use App\Service\IrcService;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class InputHandler
 {

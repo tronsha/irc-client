@@ -136,15 +136,7 @@ class InputHandler
             $input,
             $data
         );
-        try {
-            $eventClass = '\\App\\Event\\IrcEvent' . $data[3];
-            if (false === class_exists($eventClass)) {
-                throw new IrcEventClassNotExistsException('Class "' . $eventClass . '" not exists');
-            }
-            $this->dispatcher->dispatch('irc', new $eventClass($data));
-        } catch (IrcEventClassNotExistsException $exception) {
-            $this->getConsoleService()->writeToConsole('<error>' . $exception->getMessage() . '</error>');
-        }
+        $this->dispatcher->dispatch('on' . $data[3], null, $data);
     }
 
     /**

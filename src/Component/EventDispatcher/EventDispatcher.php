@@ -11,8 +11,15 @@
 
 namespace App\Component\EventDispatcher;
 
+use App\Event\IrcEventOn372;
 use Symfony\Component\EventDispatcher\EventDispatcher AS SymfonyEventDispatcher;
+use Symfony\Component\EventDispatcher\Event;
 
 class EventDispatcher extends SymfonyEventDispatcher
 {
+    public function dispatch($eventName, Event $event = null, $data = null)
+    {
+        $event = new IrcEventOn372($data);
+        return parent::dispatch($eventName, $event);
+    }
 }

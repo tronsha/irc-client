@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Event;
+namespace App\Event\Irc;
 
 use Symfony\Component\EventDispatcher\Event;
 
-class IrcEventOn464 extends Event
+class On372 extends Event
 {
     private $data;
 

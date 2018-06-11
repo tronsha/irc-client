@@ -11,23 +11,18 @@ class IrcEventSubscriber implements EventSubscriberInterface
 {
     private static $subscribedEvents = null;
 
-    public function onIrcEvent(Event $event)
+    public function handle(Event $event)
     {
         $event->handle();
     }
 
-    public function __call($name, $arguments)
-    {
-        $arguments[0]->handle();
-    }
-
     public static function loadSubscribedEvents()
     {
-        $eventDirectory = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Event') . DIRECTORY_SEPARATOR;
-        $ircEventFiles = glob($eventDirectory . 'IrcEventOn*.php');
+        $ircEventDirectory = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Event' . DIRECTORY_SEPARATOR . 'Irc');
+        $ircEventFiles = glob($ircEventDirectory . DIRECTORY_SEPARATOR . 'On*.php');
         foreach ($ircEventFiles as $ircEventFile) {
-            $name = lcfirst(str_replace([$eventDirectory . 'IrcEvent' , '.php'], '', $ircEventFile));
-            self::$subscribedEvents[$name] = $name;
+            $name = lcfirst(str_replace([$ircEventDirectory . DIRECTORY_SEPARATOR , '.php'], '', $ircEventFile));
+            self::$subscribedEvents[$name] = 'handle';
         }
     }
 

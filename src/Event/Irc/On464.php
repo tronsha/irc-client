@@ -2,18 +2,6 @@
 
 namespace App\Event\Irc;
 
-use Symfony\Component\EventDispatcher\Event;
-
-class On464 extends Event
+class On464 extends AbstractIrcEvent
 {
-    private $data;
-
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
-
-    public function handle()
-    {
-    }
 }

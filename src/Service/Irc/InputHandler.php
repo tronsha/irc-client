@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service\Irc;
 
-use App\Component\EventDispatcher\EventDispatcher;
 use App\EventListener\IrcEventSubscriber;
-use App\Exception\IrcEventClassNotExistsException;
 use App\Exception\IrcException;
 use App\Service\ConsoleService;
 use App\Service\IrcService;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class InputHandler
 {
@@ -136,7 +135,13 @@ class InputHandler
             $input,
             $data
         );
-        $this->dispatcher->dispatch('on' . $data[3], null, $data);
+        $eventName = 'on' . ucfirst(strtolower($data[3]));
+        $class = '\\App\\Event\\Irc\\' . ucfirst($eventName);
+        if (true === class_exists($class)) {
+            $event = new $class($data);
+            $this->dispatcher->dispatch($eventName, $event);
+            unset($event);
+        }
     }
 
     /**

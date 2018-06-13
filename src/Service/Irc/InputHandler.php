@@ -135,7 +135,7 @@ class InputHandler
             $input,
             $data
         );
-        $eventName = 'on' . ucfirst(strtolower($data[3]));
+        $eventName = 'on' . strtoupper($data[3]);
         $class = '\\App\\Event\\Irc\\' . ucfirst($eventName);
         if (true === class_exists($class)) {
             $event = new $class($data);

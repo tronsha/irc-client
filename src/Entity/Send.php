@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * DashboardTile.
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="\App\Repository\SendRepository")
  * @ORM\Table(name="send")
  */
 class Send

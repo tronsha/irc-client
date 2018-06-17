@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Entity\Send;
 use App\Service\Irc\InputHandler;
 use App\Service\IrcService;
 use App\Service\ConsoleService;
 use Exception;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class IrcCommand extends Command
+class IrcCommand extends ContainerAwareCommand
 {
     /**
      * @var ConsoleService
@@ -102,6 +103,17 @@ class IrcCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+
+            $doctrine = $this->getContainer()->get('doctrine');
+            $sendRepository = $doctrine->getRepository(Send::class);
+            $send = $sendRepository->getSend();
+//            $sendRepository->remove($send);
+//            $sendRepository->flush();
+
+
+            var_dump($send);
+            die;
+
             $this->getConsoleService()->setOutput($output);
             $this->getInputHandler()
                 ->setConsoleService($this->getConsoleService())

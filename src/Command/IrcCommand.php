@@ -104,15 +104,11 @@ class IrcCommand extends ContainerAwareCommand
     {
         try {
 
-            $doctrine = $this->getContainer()->get('doctrine');
-            $sendRepository = $doctrine->getRepository(Send::class);
-            $send = $sendRepository->getSend();
-//            $sendRepository->remove($send);
-//            $sendRepository->flush();
-
-
-            var_dump($send);
-            die;
+//            $entityManager = $this->getContainer()->get('doctrine')->getManager();
+//            $sendEntity = $entityManager->getRepository(Send::class)->getSend();
+//            $send = $sendEntity->getText();
+//            $entityManager->remove($sendEntity);
+//            $entityManager->flush();
 
             $this->getConsoleService()->setOutput($output);
             $this->getInputHandler()

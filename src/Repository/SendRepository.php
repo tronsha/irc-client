@@ -16,8 +16,7 @@ class SendRepository extends EntityRepository
             ->addOrderBy('s.id', 'ASC')
             ->getQuery()
             ->setMaxResults(1);
-        $result = $qb->execute();
 
-        return $result[0];
+        return $qb->getSingleResult();
     }
 }

@@ -28,4 +28,4 @@ services:
 
     App\Service\IrcService:
         calls:
-            - [setIrcServer, ['127.0.0.1', 6667, 'test']]
+            - [setIrcServer, ['chat.freenode.net', 6667]]

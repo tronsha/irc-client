@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Entity\Send;
-use App\Service\Irc\InputHandler;
-use App\Service\IrcService;
 use App\Service\ConsoleService;
+use App\Service\IrcService;
+use App\Service\Irc\InputHandler;
+use App\Service\PreformService;
+use App\Service\SendService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,6 +30,16 @@ class IrcCommand extends ContainerAwareCommand
      * @var IrcService
      */
     private $ircService;
+
+    /**
+     * @var PreformService
+     */
+    private $preformService;
+
+    /**
+     * @var SendService
+     */
+    private $sendService;
 
     /**
      * @return ConsoleService
@@ -87,11 +98,56 @@ class IrcCommand extends ContainerAwareCommand
         return $this;
     }
 
-    public function __construct(IrcService $ircService, ConsoleService $consoleService, InputHandler $inputHandler)
+    /**
+     * @return PreformService
+     */
+    public function getPreformService(): PreformService
     {
+        return $this->preformService;
+    }
+
+    /**
+     * @param PreformService $preformService
+     * @return IrcCommand
+     */
+    public function setPreformService(PreformService $preformService): IrcCommand
+    {
+        $this->preformService = $preformService;
+
+        return $this;
+    }
+
+    /**
+     * @return SendService
+     */
+    public function getSendService(): SendService
+    {
+        return $this->sendService;
+    }
+
+    /**
+     * @param SendService $sendService
+     * @return IrcCommand
+     */
+    public function setSendService(SendService $sendService): IrcCommand
+    {
+        $this->sendService = $sendService;
+
+        return $this;
+    }
+
+    public function __construct(
+        IrcService $ircService,
+        ConsoleService $consoleService,
+        PreformService $preformService,
+        SendService $sendService,
+        InputHandler $inputHandler
+    ) {
         $this->setConsoleService($consoleService);
         $this->setInputHandler($inputHandler);
         $this->setIrcService($ircService);
+        $this->setPreformService($preformService);
+        $this->setSendService($sendService);
         parent::__construct();
     }
 
@@ -103,22 +159,17 @@ class IrcCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-
-//            $entityManager = $this->getContainer()->get('doctrine')->getManager();
-//            $sendEntity = $entityManager->getRepository(Send::class)->getSend();
-//            $send = $sendEntity->getText();
-//            $entityManager->remove($sendEntity);
-//            $entityManager->flush();
-
             $this->getConsoleService()->setOutput($output);
             $this->getInputHandler()
                 ->setConsoleService($this->getConsoleService())
                 ->setIrcService($this->getIrcService())
                 ->setOptions($input->getOptions());
             $ircServerConnection = $this->getIrcService()->connectToIrcServer();
+            $this->getPreformService()->preform();
             while (false === feof($ircServerConnection)) {
                 $inputFromServer = $this->getIrcService()->readFromIrcServer();
                 $this->getInputHandler()->handle($inputFromServer);
+//                $this->getIrcService()->writeToIrcServer($this->getSendService()->getSend());
             }
         } catch (Exception $exception) {
             $this->getConsoleService()->writeToConsole('<error>' . $exception->getMessage() . '</error>');

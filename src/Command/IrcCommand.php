@@ -7,8 +7,7 @@ namespace App\Command;
 use App\Service\ConsoleService;
 use App\Service\IrcService;
 use App\Service\Irc\InputHandler;
-use App\Service\PreformService;
-use App\Service\SendService;
+use App\Service\Irc\OutputHandler;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,24 +21,19 @@ class IrcCommand extends ContainerAwareCommand
     private $consoleService;
 
     /**
-     * @var InputHandler
-     */
-    private $inputHandler;
-
-    /**
      * @var IrcService
      */
     private $ircService;
 
     /**
-     * @var PreformService
+     * @var InputHandler
      */
-    private $preformService;
+    private $inputHandler;
 
     /**
-     * @var SendService
+     * @var OutputHandler
      */
-    private $sendService;
+    private $outputHandler;
 
     /**
      * @return ConsoleService
@@ -80,6 +74,25 @@ class IrcCommand extends ContainerAwareCommand
     }
 
     /**
+     * @return OutputHandler
+     */
+    public function getOutputHandler(): OutputHandler
+    {
+        return $this->outputHandler;
+    }
+
+    /**
+     * @param OutputHandler $outputHandler
+     * @return IrcCommand
+     */
+    public function setOutputHandler(OutputHandler $outputHandler): IrcCommand
+    {
+        $this->outputHandler = $outputHandler;
+
+        return $this;
+    }
+
+    /**
      * @return IrcService
      */
     public function getIrcService(): IrcService
@@ -106,48 +119,18 @@ class IrcCommand extends ContainerAwareCommand
         return $this->preformService;
     }
 
-    /**
-     * @param PreformService $preformService
-     * @return IrcCommand
-     */
-    public function setPreformService(PreformService $preformService): IrcCommand
-    {
-        $this->preformService = $preformService;
 
-        return $this;
-    }
-
-    /**
-     * @return SendService
-     */
-    public function getSendService(): SendService
-    {
-        return $this->sendService;
-    }
-
-    /**
-     * @param SendService $sendService
-     * @return IrcCommand
-     */
-    public function setSendService(SendService $sendService): IrcCommand
-    {
-        $this->sendService = $sendService;
-
-        return $this;
-    }
 
     public function __construct(
         IrcService $ircService,
         ConsoleService $consoleService,
-        PreformService $preformService,
-        SendService $sendService,
-        InputHandler $inputHandler
+        InputHandler $inputHandler,
+        OutputHandler $outputHandler
     ) {
         $this->setConsoleService($consoleService);
         $this->setInputHandler($inputHandler);
+        $this->setOutputHandler($outputHandler);
         $this->setIrcService($ircService);
-        $this->setPreformService($preformService);
-        $this->setSendService($sendService);
         parent::__construct();
     }
 
@@ -164,12 +147,15 @@ class IrcCommand extends ContainerAwareCommand
                 ->setConsoleService($this->getConsoleService())
                 ->setIrcService($this->getIrcService())
                 ->setOptions($input->getOptions());
+            $this->getOutputHandler()
+                ->setConsoleService($this->getConsoleService())
+                ->setIrcService($this->getIrcService());
+            $this->getOutputHandler()->preform();
             $ircServerConnection = $this->getIrcService()->connectToIrcServer();
-            $this->getPreformService()->preform();
             while (false === feof($ircServerConnection)) {
                 $inputFromServer = $this->getIrcService()->readFromIrcServer();
                 $this->getInputHandler()->handle($inputFromServer);
-//                $this->getIrcService()->writeToIrcServer($this->getSendService()->getSend());
+                $this->getOutputHandler()->handle();
             }
         } catch (Exception $exception) {
             $this->getConsoleService()->writeToConsole('<error>' . $exception->getMessage() . '</error>');

@@ -39,9 +39,9 @@ class OutputHandler
 
     /**
      * @param PreformService $preformService
-     * @return IrcCommand
+     * @return OutputHandler
      */
-    public function setPreformService(PreformService $preformService): IrcCommand
+    public function setPreformService(PreformService $preformService): OutputHandler
     {
         $this->preformService = $preformService;
 
@@ -58,9 +58,9 @@ class OutputHandler
 
     /**
      * @param SendService $sendService
-     * @return IrcCommand
+     * @return OutputHandler
      */
-    public function setSendService(SendService $sendService): IrcCommand
+    public function setSendService(SendService $sendService): OutputHandler
     {
         $this->sendService = $sendService;
 

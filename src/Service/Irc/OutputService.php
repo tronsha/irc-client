@@ -9,7 +9,7 @@ use App\Service\IrcService;
 use App\Service\PreformService;
 use App\Service\SendService;
 
-class OutputHandler
+class OutputService
 {
     /**
      * @var IrcService

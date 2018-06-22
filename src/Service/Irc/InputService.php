@@ -10,7 +10,7 @@ use App\Service\ConsoleService;
 use App\Service\IrcService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class InputHandler
+class InputService
 {
     /**
      * @var array

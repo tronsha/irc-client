@@ -6,8 +6,8 @@ namespace App\Command;
 
 use App\Service\ConsoleService;
 use App\Service\IrcService;
-use App\Service\Irc\InputHandler;
-use App\Service\Irc\OutputHandler;
+use App\Service\Irc\InputService;
+use App\Service\Irc\OutputService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,12 +26,12 @@ class IrcCommand extends ContainerAwareCommand
     private $ircService;
 
     /**
-     * @var InputHandler
+     * @var InputService
      */
     private $inputHandler;
 
     /**
-     * @var OutputHandler
+     * @var OutputService
      */
     private $outputHandler;
 
@@ -55,18 +55,18 @@ class IrcCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return InputHandler
+     * @return InputService
      */
-    public function getInputHandler(): InputHandler
+    public function getInputService(): InputService
     {
         return $this->inputHandler;
     }
 
     /**
-     * @param InputHandler $inputHandler
+     * @param InputService $inputHandler
      * @return IrcCommand
      */
-    public function setInputHandler(InputHandler $inputHandler): IrcCommand
+    public function setInputService(InputService $inputHandler): IrcCommand
     {
         $this->inputHandler = $inputHandler;
 
@@ -74,18 +74,18 @@ class IrcCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return OutputHandler
+     * @return OutputService
      */
-    public function getOutputHandler(): OutputHandler
+    public function getOutputService(): OutputService
     {
         return $this->outputHandler;
     }
 
     /**
-     * @param OutputHandler $outputHandler
+     * @param OutputService $outputHandler
      * @return IrcCommand
      */
-    public function setOutputHandler(OutputHandler $outputHandler): IrcCommand
+    public function setOutputService(OutputService $outputHandler): IrcCommand
     {
         $this->outputHandler = $outputHandler;
 
@@ -124,12 +124,12 @@ class IrcCommand extends ContainerAwareCommand
     public function __construct(
         IrcService $ircService,
         ConsoleService $consoleService,
-        InputHandler $inputHandler,
-        OutputHandler $outputHandler
+        InputService $inputHandler,
+        OutputService $outputHandler
     ) {
         $this->setConsoleService($consoleService);
-        $this->setInputHandler($inputHandler);
-        $this->setOutputHandler($outputHandler);
+        $this->setInputService($inputHandler);
+        $this->setOutputService($outputHandler);
         $this->setIrcService($ircService);
         parent::__construct();
     }
@@ -143,19 +143,19 @@ class IrcCommand extends ContainerAwareCommand
     {
         try {
             $this->getConsoleService()->setOutput($output);
-            $this->getInputHandler()
+            $this->getInputService()
                 ->setConsoleService($this->getConsoleService())
                 ->setIrcService($this->getIrcService())
                 ->setOptions($input->getOptions());
-            $this->getOutputHandler()
+            $this->getOutputService()
                 ->setConsoleService($this->getConsoleService())
                 ->setIrcService($this->getIrcService());
-            $this->getOutputHandler()->preform();
+            $this->getOutputService()->preform();
             $ircServerConnection = $this->getIrcService()->connectToIrcServer();
             while (false === feof($ircServerConnection)) {
                 $inputFromServer = $this->getIrcService()->readFromIrcServer();
-                $this->getInputHandler()->handle($inputFromServer);
-                $this->getOutputHandler()->handle();
+                $this->getInputService()->handle($inputFromServer);
+                $this->getOutputService()->handle();
             }
         } catch (Exception $exception) {
             $this->getConsoleService()->writeToConsole('<error>' . $exception->getMessage() . '</error>');

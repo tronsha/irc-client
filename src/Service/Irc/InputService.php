@@ -48,9 +48,9 @@ class InputService
 
     /**
      * @param array $options
-     * @return InputHandler
+     * @return InputService
      */
-    public function setOptions(array $options): InputHandler
+    public function setOptions(array $options): InputService
     {
         $this->options = $options;
 
@@ -59,9 +59,9 @@ class InputService
 
     /**
      * @param array $options
-     * @return InputHandler
+     * @return InputService
      */
-    public function addOptions(array $options): InputHandler
+    public function addOptions(array $options): InputService
     {
         $this->setOptions(array_merge($this->getOptions(), $options));
 
@@ -78,9 +78,9 @@ class InputService
 
     /**
      * @param IrcService $ircService
-     * @return InputHandler
+     * @return InputService
      */
-    public function setIrcService(IrcService $ircService): InputHandler
+    public function setIrcService(IrcService $ircService): InputService
     {
         $this->ircService = $ircService;
 
@@ -97,9 +97,9 @@ class InputService
 
     /**
      * @param ConsoleService $consoleService
-     * @return InputHandler
+     * @return InputService
      */
-    public function setConsoleService(ConsoleService $consoleService): InputHandler
+    public function setConsoleService(ConsoleService $consoleService): InputService
     {
         $this->consoleService = $consoleService;
 

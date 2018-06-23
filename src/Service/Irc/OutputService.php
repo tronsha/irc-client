@@ -39,9 +39,9 @@ class OutputService
 
     /**
      * @param PreformService $preformService
-     * @return OutputHandler
+     * @return OutputService
      */
-    public function setPreformService(PreformService $preformService): OutputHandler
+    public function setPreformService(PreformService $preformService): OutputService
     {
         $this->preformService = $preformService;
 
@@ -58,9 +58,9 @@ class OutputService
 
     /**
      * @param SendService $sendService
-     * @return OutputHandler
+     * @return OutputService
      */
-    public function setSendService(SendService $sendService): OutputHandler
+    public function setSendService(SendService $sendService): OutputService
     {
         $this->sendService = $sendService;
 
@@ -77,9 +77,9 @@ class OutputService
 
     /**
      * @param IrcService $ircService
-     * @return OutputHandler
+     * @return OutputService
      */
-    public function setIrcService(IrcService $ircService): OutputHandler
+    public function setIrcService(IrcService $ircService): OutputService
     {
         $this->ircService = $ircService;
 
@@ -96,9 +96,9 @@ class OutputService
 
     /**
      * @param ConsoleService $consoleService
-     * @return OutputHandler
+     * @return OutputService
      */
-    public function setConsoleService(ConsoleService $consoleService): OutputHandler
+    public function setConsoleService(ConsoleService $consoleService): OutputService
     {
         $this->consoleService = $consoleService;
 

@@ -28,12 +28,12 @@ class IrcCommand extends ContainerAwareCommand
     /**
      * @var InputService
      */
-    private $inputHandler;
+    private $inputService;
 
     /**
      * @var OutputService
      */
-    private $outputHandler;
+    private $outputService;
 
     /**
      * @return ConsoleService
@@ -59,16 +59,16 @@ class IrcCommand extends ContainerAwareCommand
      */
     public function getInputService(): InputService
     {
-        return $this->inputHandler;
+        return $this->inputService;
     }
 
     /**
-     * @param InputService $inputHandler
+     * @param InputService $inputService
      * @return IrcCommand
      */
-    public function setInputService(InputService $inputHandler): IrcCommand
+    public function setInputService(InputService $inputService): IrcCommand
     {
-        $this->inputHandler = $inputHandler;
+        $this->inputService = $inputService;
 
         return $this;
     }
@@ -78,16 +78,16 @@ class IrcCommand extends ContainerAwareCommand
      */
     public function getOutputService(): OutputService
     {
-        return $this->outputHandler;
+        return $this->outputService;
     }
 
     /**
-     * @param OutputService $outputHandler
+     * @param OutputService $outputService
      * @return IrcCommand
      */
-    public function setOutputService(OutputService $outputHandler): IrcCommand
+    public function setOutputService(OutputService $outputService): IrcCommand
     {
-        $this->outputHandler = $outputHandler;
+        $this->outputService = $outputService;
 
         return $this;
     }

@@ -124,12 +124,12 @@ class IrcCommand extends ContainerAwareCommand
     public function __construct(
         IrcService $ircService,
         ConsoleService $consoleService,
-        InputService $inputHandler,
-        OutputService $outputHandler
+        InputService $inputService,
+        OutputService $outputService
     ) {
         $this->setConsoleService($consoleService);
-        $this->setInputService($inputHandler);
-        $this->setOutputService($outputHandler);
+        $this->setInputService($inputService);
+        $this->setOutputService($outputService);
         $this->setIrcService($ircService);
         parent::__construct();
     }

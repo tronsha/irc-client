@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Command;
 
@@ -119,19 +119,29 @@ class IrcCommand extends ContainerAwareCommand
         return $this->preformService;
     }
 
-
-
     public function __construct(
         IrcService $ircService,
         ConsoleService $consoleService,
         InputService $inputService,
         OutputService $outputService
-    ) {
+    )
+    {
         $this->setConsoleService($consoleService);
         $this->setInputService($inputService);
         $this->setOutputService($outputService);
         $this->setIrcService($ircService);
         parent::__construct();
+        $this->init();
+    }
+
+    protected function init()
+    {
+        $this->getInputService()
+            ->setConsoleService($this->getConsoleService())
+            ->setIrcService($this->getIrcService());
+        $this->getOutputService()
+            ->setConsoleService($this->getConsoleService())
+            ->setIrcService($this->getIrcService());
     }
 
     protected function configure()
@@ -143,13 +153,7 @@ class IrcCommand extends ContainerAwareCommand
     {
         try {
             $this->getConsoleService()->setOutput($output);
-            $this->getInputService()
-                ->setConsoleService($this->getConsoleService())
-                ->setIrcService($this->getIrcService())
-                ->setOptions($input->getOptions());
-            $this->getOutputService()
-                ->setConsoleService($this->getConsoleService())
-                ->setIrcService($this->getIrcService());
+            $this->getInputService()->setOptions($input->getOptions());
             $this->getOutputService()->preform();
             $ircServerConnection = $this->getIrcService()->connectToIrcServer();
             while (false === feof($ircServerConnection)) {

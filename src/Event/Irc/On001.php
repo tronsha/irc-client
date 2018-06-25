@@ -2,7 +2,7 @@
 
 namespace App\Event\Irc;
 
-class On464 extends AbstractIrcEvent
+class On001 extends AbstractIrcEvent
 {
     public function on001()
     {

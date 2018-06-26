@@ -138,7 +138,7 @@ class InputService
         $eventName = 'on' . strtoupper($data[3]);
         $class = '\\App\\Event\\Irc\\' . ucfirst($eventName);
         if (true === class_exists($class)) {
-            $event = new $class($data);
+            $event = new $class($this->getIrcService(), $data);
             $this->dispatcher->dispatch($eventName, $event);
             unset($event);
         }

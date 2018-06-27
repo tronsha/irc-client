@@ -2,17 +2,17 @@
 
 namespace App\Event\Irc;
 
-use App\Service\IrcService;
+use App\Service\Irc\OutputService;
 use Symfony\Component\EventDispatcher\Event;
 
 abstract class AbstractIrcEvent extends Event
 {
-    private $ircService;
     private $data;
+    private $ircOutputService;
 
-    public function __construct(IrcService $ircService, $data)
+    public function __construct($data, OutputService $ircOutputService)
     {
-        $this->ircService = $ircService;
+        $this->ircOutputService = $ircOutputService;
         $this->data = $data;
     }
 

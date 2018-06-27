@@ -23,6 +23,11 @@ class InputService
     private $ircService;
 
     /**
+     * @var OutputService
+     */
+    private $outputService;
+
+    /**
      * @var ConsoleService
      */
     private $consoleService;
@@ -106,6 +111,25 @@ class InputService
         return $this;
     }
 
+    /**
+     * @return OutputService
+     */
+    public function getOutputService(): OutputService
+    {
+        return $this->outputService;
+    }
+
+    /**
+     * @param OutputService $outputService
+     * @return OutputService
+     */
+    public function setOutputService(OutputService $outputService): OutputService
+    {
+        $this->outputService = $outputService;
+
+        return $this;
+    }
+
     public function handle($input)
     {
         try {
@@ -138,7 +162,7 @@ class InputService
         $eventName = 'on' . strtoupper($data[3]);
         $class = '\\App\\Event\\Irc\\' . ucfirst($eventName);
         if (true === class_exists($class)) {
-            $event = new $class($this->getIrcService(), $data);
+            $event = new $class($data, $this->getIrcOutputService());
             $this->dispatcher->dispatch($eventName, $event);
             unset($event);
         }

@@ -136,12 +136,13 @@ class IrcCommand extends ContainerAwareCommand
 
     protected function init()
     {
-        $this->getInputService()
-            ->setConsoleService($this->getConsoleService())
-            ->setIrcService($this->getIrcService());
         $this->getOutputService()
             ->setConsoleService($this->getConsoleService())
             ->setIrcService($this->getIrcService());
+        $this->getInputService()
+            ->setConsoleService($this->getConsoleService())
+            ->setIrcService($this->getIrcService())
+            ->setOutputService($this->getOutputService());
     }
 
     protected function configure()

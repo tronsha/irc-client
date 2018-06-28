@@ -31,6 +31,11 @@ class OutputService
      */
     private $sendService;
 
+    /**
+     * @var bool
+     */
+    private $active = false;
+
     public function __construct(PreformService $preformService, SendService $sendService)
     {
         $this->setPreformService($preformService);
@@ -103,6 +108,16 @@ class OutputService
         $this->consoleService = $consoleService;
 
         return $this;
+    }
+
+    public function enableOutput()
+    {
+        $this->active = true;
+    }
+
+    public function disableOutput()
+    {
+        $this->active = false;
     }
 
     public function preform()

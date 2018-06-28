@@ -7,8 +7,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 abstract class AbstractIrcEvent extends Event
 {
-    private $data;
-    private $ircOutputService;
+    protected $data;
+    protected $ircOutputService;
 
     public function __construct($data, OutputService $ircOutputService)
     {

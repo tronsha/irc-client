@@ -121,9 +121,9 @@ class InputService
 
     /**
      * @param OutputService $outputService
-     * @return OutputService
+     * @return InputService
      */
-    public function setOutputService(OutputService $outputService): OutputService
+    public function setOutputService(OutputService $outputService): InputService
     {
         $this->outputService = $outputService;
 

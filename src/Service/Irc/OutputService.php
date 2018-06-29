@@ -120,6 +120,11 @@ class OutputService
         $this->active = false;
     }
 
+    public function isActive()
+    {
+        return $this->active;
+    }
+
     public function preform()
     {
 
@@ -127,7 +132,10 @@ class OutputService
 
     public function handle()
     {
-
+        if ($this->isActive()) {
+            $send = $this->getSendService()->getSend();
+            $this->getIrcService()->writeToIrcServer($send);
+        }
     }
 
 }

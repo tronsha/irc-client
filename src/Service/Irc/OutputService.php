@@ -134,8 +134,11 @@ class OutputService
     {
         if ($this->isActive()) {
             $send = $this->getSendService()->getSend();
-            $this->getIrcService()->writeToIrcServer($send);
+            if (false === empty($send)) {
+                sleep(1);
+                $this->getIrcService()->writeToIrcServer($send);
+                $this->getConsoleService()->writeToConsole($send);
+            }
         }
     }
-
 }

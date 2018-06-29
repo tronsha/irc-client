@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityRepository;
 
 class SendRepository extends EntityRepository
 {
-    public function getSend(): Send
+    public function getSend(): ?Send
     {
         $qb = $this->createQueryBuilder('s')
             ->orderBy('s.priority', 'DESC')
@@ -17,6 +17,6 @@ class SendRepository extends EntityRepository
             ->getQuery()
             ->setMaxResults(1);
 
-        return $qb->getSingleResult();
+        return $qb->getOneOrNullResult();
     }
 }

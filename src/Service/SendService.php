@@ -26,9 +26,14 @@ class SendService
     public function getSend()
     {
         $sendEntity = $this->entityManager->getRepository(Send::class)->getSend();
+
+        if (null === $sendEntity) {
+            return null;
+        }
+
         $send = $sendEntity->getText();
-//        $entityManager->remove($sendEntity);
-//        $entityManager->flush();
+        $this->entityManager->remove($sendEntity);
+        $this->entityManager->flush();
 
         return $send;
     }

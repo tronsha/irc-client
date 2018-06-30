@@ -36,8 +36,14 @@ class OutputService
      */
     private $active = false;
 
-    public function __construct(PreformService $preformService, SendService $sendService)
-    {
+    public function __construct(
+        IrcService $ircService,
+        ConsoleService $consoleService,
+        PreformService $preformService,
+        SendService $sendService
+    ) {
+        $this->setIrcService($ircService);
+        $this->setConsoleService($consoleService);
         $this->setPreformService($preformService);
         $this->setSendService($sendService);
     }

@@ -37,8 +37,14 @@ class InputService
      */
     private $dispatcher;
 
-    public function __construct()
-    {
+    public function __construct(
+        IrcService $ircService,
+        ConsoleService $consoleService,
+        OutputService $outputService
+    ) {
+        $this->setIrcService($ircService);
+        $this->setConsoleService($consoleService);
+        $this->setOutputService($outputService);
         $this->dispatcher = new EventDispatcher();
         $this->dispatcher->addSubscriber(new IrcEventSubscriber());
     }

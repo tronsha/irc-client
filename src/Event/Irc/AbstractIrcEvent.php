@@ -10,10 +10,14 @@ abstract class AbstractIrcEvent extends Event
     protected $data;
     protected $ircOutputService;
 
-    public function __construct($data, OutputService $ircOutputService)
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
+
+    public function setOutputService(OutputService $ircOutputService)
     {
         $this->ircOutputService = $ircOutputService;
-        $this->data = $data;
     }
 
     public function handle()

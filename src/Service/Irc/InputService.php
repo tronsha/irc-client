@@ -44,9 +44,8 @@ class InputService
     ) {
         $this->setIrcService($ircService);
         $this->setConsoleService($consoleService);
-        $this->setOutputService($outputService);
         $this->dispatcher = new EventDispatcher();
-        $this->dispatcher->addSubscriber(new IrcEventSubscriber());
+        $this->dispatcher->addSubscriber((new IrcEventSubscriber())->setOutputService($outputService));
     }
 
     /**
@@ -117,25 +116,6 @@ class InputService
         return $this;
     }
 
-    /**
-     * @return OutputService
-     */
-    public function getOutputService(): OutputService
-    {
-        return $this->outputService;
-    }
-
-    /**
-     * @param OutputService $outputService
-     * @return InputService
-     */
-    public function setOutputService(OutputService $outputService): InputService
-    {
-        $this->outputService = $outputService;
-
-        return $this;
-    }
-
     public function handle($input)
     {
         try {
@@ -168,7 +148,7 @@ class InputService
         $eventName = 'on' . strtoupper($data[3]);
         $class = '\\App\\Event\\Irc\\' . ucfirst($eventName);
         if (true === class_exists($class)) {
-            $event = new $class($data, $this->getOutputService());
+            $event = new $class($data);
             $this->dispatcher->dispatch($eventName, $event);
             unset($event);
         }

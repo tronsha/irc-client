@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
+use App\Service\Irc\OutputService;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -11,8 +12,23 @@ class IrcEventSubscriber implements EventSubscriberInterface
 {
     private static $subscribedEvents = null;
 
+    private $outputService;
+
+    public function setOutputService(OutputService $outputService): IrcEventSubscriber
+    {
+        $this->outputService = $outputService;
+
+        return $this;
+    }
+
+    public function getOutputService(): OutputService
+    {
+        return $this->outputService;
+    }
+
     public function handle(Event $event)
     {
+        $event->setOutputService($this->getOutputService());
         $event->handle();
     }
 

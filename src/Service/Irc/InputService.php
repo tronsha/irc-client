@@ -44,8 +44,12 @@ class InputService
     ) {
         $this->setIrcService($ircService);
         $this->setConsoleService($consoleService);
+
+        $eventSubscriber = new IrcEventSubscriber();
+        $eventSubscriber->setOutputService($outputService);
+
         $this->dispatcher = new EventDispatcher();
-        $this->dispatcher->addSubscriber((new IrcEventSubscriber())->setOutputService($outputService));
+        $this->dispatcher->addSubscriber($eventSubscriber);
     }
 
     /**

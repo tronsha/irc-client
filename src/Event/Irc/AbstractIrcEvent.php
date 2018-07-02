@@ -8,16 +8,24 @@ use Symfony\Component\EventDispatcher\Event;
 abstract class AbstractIrcEvent extends Event
 {
     protected $data;
-    protected $ircOutputService;
+
+    private $outputService;
 
     public function __construct($data)
     {
         $this->data = $data;
     }
 
-    public function setOutputService(OutputService $ircOutputService)
+    public function setOutputService(OutputService $outputService): Event
     {
-        $this->ircOutputService = $ircOutputService;
+        $this->outputService = $outputService;
+
+        return $this;
+    }
+
+    public function getOutputService(): OutputService
+    {
+        return $this->outputService;
     }
 
     public function handle()

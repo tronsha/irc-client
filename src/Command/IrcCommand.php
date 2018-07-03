@@ -36,6 +36,11 @@ class IrcCommand extends ContainerAwareCommand
     private $outputService;
 
     /**
+     * @var resource
+     */
+    private $ircServerConnection;
+
+    /**
      * @return ConsoleService
      */
     public function getConsoleService(): ConsoleService
@@ -112,6 +117,25 @@ class IrcCommand extends ContainerAwareCommand
     }
 
     /**
+     * @return resource
+     */
+    public function getIrcServerConnection()
+    {
+        return $this->ircServerConnection;
+    }
+
+    /**
+     * @param resource $ircServerConnection
+     * @return IrcCommand
+     */
+    public function setIrcServerConnection($ircServerConnection): IrcCommand
+    {
+        $this->ircServerConnection = $ircServerConnection;
+
+        return $this;
+    }
+
+    /**
      * @return PreformService
      */
     public function getPreformService(): PreformService
@@ -124,13 +148,12 @@ class IrcCommand extends ContainerAwareCommand
         ConsoleService $consoleService,
         InputService $inputService,
         OutputService $outputService
-    )
-    {
+    ) {
+        parent::__construct();
         $this->setConsoleService($consoleService);
+        $this->setIrcService($ircService);
         $this->setInputService($inputService);
         $this->setOutputService($outputService);
-        $this->setIrcService($ircService);
-        parent::__construct();
     }
 
     protected function configure()
@@ -144,14 +167,24 @@ class IrcCommand extends ContainerAwareCommand
             $this->getConsoleService()->setOutput($output);
             $this->getInputService()->setOptions($input->getOptions());
             $this->getOutputService()->preform();
-            $ircServerConnection = $this->getIrcService()->connectToIrcServer();
-            while (false === feof($ircServerConnection)) {
-                $inputFromServer = $this->getIrcService()->readFromIrcServer();
-                $this->getInputService()->handle($inputFromServer);
-                $this->getOutputService()->handle();
-            }
+            $this->connectToIrcServer();
+            $this->handleIrcInputAndOutput();
         } catch (Exception $exception) {
             $this->getConsoleService()->writeToConsole('<error>' . $exception->getMessage() . '</error>');
+        }
+    }
+
+    protected function connectToIrcServer()
+    {
+        $this->setIrcServerConnection($this->getIrcService()->connectToIrcServer());
+    }
+
+    protected function handleIrcInputAndOutput()
+    {
+        while (false === feof($this->getIrcServerConnection())) {
+            $inputFromServer = $this->getIrcService()->readFromIrcServer();
+            $this->getInputService()->handle($inputFromServer);
+            $this->getOutputService()->handle();
         }
     }
 }

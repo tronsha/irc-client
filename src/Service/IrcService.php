@@ -48,7 +48,7 @@ class IrcService
         }
 
         $this->writeToIrcServer('USER Cerberus * * : Cerberus');
-        $this->writeToIrcServer('NICK Cerber');
+        $this->writeToIrcServer('NICK Ceber');
 
         return $this->ircServerConnection;
     }

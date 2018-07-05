@@ -140,7 +140,7 @@ class OutputService
     {
         if ($this->isActive()) {
             $send = $this->getSendService()->getSend();
-            if (false === empty($send)) {
+            if (is_string($send) && !empty($send)) {
                 sleep(1);
                 $this->getIrcService()->writeToIrcServer($send);
                 $this->getConsoleService()->writeToConsole($send);

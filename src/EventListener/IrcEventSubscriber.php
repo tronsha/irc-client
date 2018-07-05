@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\EventListener;
 
 use App\Service\Irc\OutputService;
+use App\Service\IrcService;
+use App\Service\NickService;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -12,7 +14,21 @@ class IrcEventSubscriber implements EventSubscriberInterface
 {
     private static $subscribedEvents = null;
 
+    private $ircService;
     private $outputService;
+    private $nickService;
+
+    public function setIrcService($ircService): IrcEventSubscriber
+    {
+        $this->ircService = $ircService;
+
+        return $this;
+    }
+
+    public function getIrcService(): IrcService
+    {
+        return $this->ircService;
+    }
 
     public function setOutputService(OutputService $outputService): IrcEventSubscriber
     {
@@ -26,9 +42,23 @@ class IrcEventSubscriber implements EventSubscriberInterface
         return $this->outputService;
     }
 
+    public function setNickService(NickService $nickService): IrcEventSubscriber
+    {
+        $this->nickService = $nickService;
+
+        return $this;
+    }
+
+    public function getNickService(): NickService
+    {
+        return $this->nickService;
+    }
+
     public function handle(Event $event)
     {
+        $event->setIrcService($this->getIrcService());
         $event->setOutputService($this->getOutputService());
+        $event->setNickService($this->getNickService());
         $event->handle();
     }
 

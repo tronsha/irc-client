@@ -6,7 +6,7 @@ namespace App\Service;
 
 class NickService
 {
-    public static function getRandomNick()
+    public function getRandomNick()
     {
         $consonant = str_split('bcdfghjklmnpqrstvwxyz');
         $vowel = str_split('aeiou');

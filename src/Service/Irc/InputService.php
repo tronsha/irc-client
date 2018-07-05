@@ -8,6 +8,7 @@ use App\EventListener\IrcEventSubscriber;
 use App\Exception\IrcException;
 use App\Service\ConsoleService;
 use App\Service\IrcService;
+use App\Service\NickService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class InputService
@@ -23,11 +24,6 @@ class InputService
     private $ircService;
 
     /**
-     * @var OutputService
-     */
-    private $outputService;
-
-    /**
      * @var ConsoleService
      */
     private $consoleService;
@@ -40,13 +36,16 @@ class InputService
     public function __construct(
         IrcService $ircService,
         ConsoleService $consoleService,
-        OutputService $outputService
+        OutputService $outputService,
+        NickService $nickService
     ) {
         $this->setIrcService($ircService);
         $this->setConsoleService($consoleService);
 
         $eventSubscriber = new IrcEventSubscriber();
+        $eventSubscriber->setIrcService($ircService);
         $eventSubscriber->setOutputService($outputService);
+        $eventSubscriber->setNickService($nickService);
 
         $this->dispatcher = new EventDispatcher();
         $this->dispatcher->addSubscriber($eventSubscriber);

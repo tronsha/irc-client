@@ -15,6 +15,11 @@ class SendService
     private $entityManager;
 
     /**
+     * @var string[]
+     */
+    private $queue = [];
+
+    /**
      * SendService constructor.
      * @param EntityManagerInterface $entityManager
      */
@@ -25,17 +30,23 @@ class SendService
 
     public function getSend()
     {
-        $sendEntity = $this->entityManager->getRepository(Send::class)->getSend();
-
-        if (null === $sendEntity) {
-            return null;
+        if (count($this->queue) > 0) {
+            $send = array_shift($this->queue);
+        } else {
+            $sendEntity = $this->entityManager->getRepository(Send::class)->getSend();
+            if (null === $sendEntity) {
+                return null;
+            }
+            $send = $sendEntity->getText();
+            $this->entityManager->remove($sendEntity);
+            $this->entityManager->flush();
         }
-
-        $send = $sendEntity->getText();
-        $this->entityManager->remove($sendEntity);
-        $this->entityManager->flush();
 
         return $send;
     }
 
+    public function setSend($output)
+    {
+        array_push($this->queue, $output);
+    }
 }

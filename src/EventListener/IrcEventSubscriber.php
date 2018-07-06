@@ -14,21 +14,8 @@ class IrcEventSubscriber implements EventSubscriberInterface
 {
     private static $subscribedEvents = null;
 
-    private $ircService;
     private $outputService;
     private $nickService;
-
-    public function setIrcService($ircService): IrcEventSubscriber
-    {
-        $this->ircService = $ircService;
-
-        return $this;
-    }
-
-    public function getIrcService(): IrcService
-    {
-        return $this->ircService;
-    }
 
     public function setOutputService(OutputService $outputService): IrcEventSubscriber
     {
@@ -56,7 +43,6 @@ class IrcEventSubscriber implements EventSubscriberInterface
 
     public function handle(Event $event)
     {
-        $event->setIrcService($this->getIrcService());
         $event->setOutputService($this->getOutputService());
         $event->setNickService($this->getNickService());
         $event->handle();

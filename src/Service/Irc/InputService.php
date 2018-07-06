@@ -43,7 +43,6 @@ class InputService
         $this->setConsoleService($consoleService);
 
         $eventSubscriber = new IrcEventSubscriber();
-        $eventSubscriber->setIrcService($ircService);
         $eventSubscriber->setOutputService($outputService);
         $eventSubscriber->setNickService($nickService);
 
@@ -123,14 +122,13 @@ class InputService
     {
         try {
             if ('' !== $input) {
+                if (true === $this->getOptions()['verbose']) {
+                    $this->getConsoleService()->writeToConsole($input);
+                }
                 if (':' === substr($input, 0, 1)) {
                     $this->colonInput($input);
                 } else {
                     $this->nonColonInput($input);
-                }
-
-                if (true === $this->getOptions()['verbose']) {
-                    $this->getConsoleService()->writeToConsole($input);
                 }
             }
         } catch (IrcException $exception) {
@@ -166,7 +164,7 @@ class InputService
     {
         if (false !== strpos(strtoupper($input), 'PING')) {
             $output = str_replace('PING', 'PONG', $input);
-            $this->getIrcService()->writeToIrcServer($output);
+            $this->get()->writeToIrcServer($output);
         }
         if (false !== strpos(strtoupper($input), 'ERROR')) {
             throw new IrcException($input);

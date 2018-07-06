@@ -142,9 +142,14 @@ class OutputService
             $send = $this->getSendService()->getSend();
             if (is_string($send) && !empty($send)) {
                 sleep(1);
-                $this->getIrcService()->writeToIrcServer($send);
-                $this->getConsoleService()->writeToConsole($send);
+                $this->output($send);
             }
         }
+    }
+
+    public function output($output)
+    {
+        $this->getIrcService()->writeToIrcServer($output);
+        $this->getConsoleService()->writeToConsole($output);
     }
 }

@@ -24,6 +24,11 @@ class InputService
     private $ircService;
 
     /**
+     * @var OutputService
+     */
+    private $outputService;
+
+    /**
      * @var ConsoleService
      */
     private $consoleService;
@@ -40,6 +45,7 @@ class InputService
         NickService $nickService
     ) {
         $this->setIrcService($ircService);
+        $this->setOutputService($outputService);
         $this->setConsoleService($consoleService);
 
         $eventSubscriber = new IrcEventSubscriber();
@@ -95,6 +101,25 @@ class InputService
     public function setIrcService(IrcService $ircService): InputService
     {
         $this->ircService = $ircService;
+
+        return $this;
+    }
+
+    /**
+     * @return OutputService
+     */
+    public function getOutputService(): OutputService
+    {
+        return $this->outputService;
+    }
+
+    /**
+     * @param OutputService $outputService
+     * @return InputService
+     */
+    public function setOutputService(OutputService $outputService): InputService
+    {
+        $this->outputService = $outputService;
 
         return $this;
     }
@@ -164,7 +189,7 @@ class InputService
     {
         if (false !== strpos(strtoupper($input), 'PING')) {
             $output = str_replace('PING', 'PONG', $input);
-            $this->get()->writeToIrcServer($output);
+            $this->getOutputService()->output($output);
         }
         if (false !== strpos(strtoupper($input), 'ERROR')) {
             throw new IrcException($input);

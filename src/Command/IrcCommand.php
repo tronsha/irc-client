@@ -166,6 +166,7 @@ class IrcCommand extends ContainerAwareCommand
         try {
             $this->getConsoleService()->setOutput($output);
             $this->getInputService()->setOptions($input->getOptions());
+            $this->getOutputService()->setOptions($input->getOptions());
             $this->getOutputService()->preform();
             $this->connectToIrcServer();
             $this->handleIrcInputAndOutput();

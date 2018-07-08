@@ -12,6 +12,11 @@ use App\Service\SendService;
 class OutputService
 {
     /**
+     * @var array
+     */
+    private $options = [];
+
+    /**
      * @var IrcService
      */
     private $ircService;
@@ -46,6 +51,25 @@ class OutputService
         $this->setConsoleService($consoleService);
         $this->setPreformService($preformService);
         $this->setSendService($sendService);
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param array $options
+     * @return OutputService
+     */
+    public function setOptions(array $options): OutputService
+    {
+        $this->options = $options;
+
+        return $this;
     }
 
     /**
@@ -150,6 +174,8 @@ class OutputService
     public function output($output)
     {
         $this->getIrcService()->writeToIrcServer($output);
-        $this->getConsoleService()->writeToConsole($output);
+        if (true === $this->getOptions()['verbose']) {
+            $this->getConsoleService()->writeToConsole($output);
+        }
     }
 }

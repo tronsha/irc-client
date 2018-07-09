@@ -51,6 +51,8 @@ class OutputService
         $this->setConsoleService($consoleService);
         $this->setPreformService($preformService);
         $this->setSendService($sendService);
+
+        $ircService->setOutputService($this);
     }
 
     /**

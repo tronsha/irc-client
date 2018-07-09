@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Exception\CouldNotConnectException;
+use App\Service\Irc\OutputService;
 
 class IrcService
 {
@@ -12,6 +13,23 @@ class IrcService
     private $ircServerPort;
     private $ircServerPassword;
     private $ircServerConnection;
+
+    /**
+     * @var OutputService
+     */
+    private $outputService;
+
+    /**
+     * @param OutputService $outputService
+     * @return IrcService
+     */
+    public function setOutputService(OutputService $outputService): IrcService
+    {
+        $this->outputService = $outputService;
+
+        return $this;
+    }
+
 
     /**
      * @param string      $server
@@ -44,11 +62,11 @@ class IrcService
         }
 
         if (null !== $this->ircServerPassword) {
-            $this->writeToIrcServer('PASS ' . $this->ircServerPassword);
+            $this->outputService->output('PASS ' . $this->ircServerPassword);
         }
 
-        $this->writeToIrcServer('USER Cerberus * * : Cerberus');
-        $this->writeToIrcServer('NICK Xoranu');
+        $this->outputService->output('USER Cerberus * * : Cerberus');
+        $this->outputService->output('NICK Xoranu');
 
         return $this->ircServerConnection;
     }

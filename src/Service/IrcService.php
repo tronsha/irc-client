@@ -30,6 +30,13 @@ class IrcService
         return $this;
     }
 
+    /**
+     * @return OutputService
+     */
+    public function getOutputService(): OutputService
+    {
+        return $this->outputService;
+    }
 
     /**
      * @param string      $server
@@ -62,11 +69,11 @@ class IrcService
         }
 
         if (null !== $this->ircServerPassword) {
-            $this->outputService->output('PASS ' . $this->ircServerPassword);
+            $this->getOutputService()->output('PASS ' . $this->ircServerPassword);
         }
 
-        $this->outputService->output('USER Cerberus * * : Cerberus');
-        $this->outputService->output('NICK Xoranu');
+        $this->getOutputService()->output('USER Cerberus * * : Cerberus');
+        $this->getOutputService()->output('NICK Xoranu');
 
         return $this->ircServerConnection;
     }

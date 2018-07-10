@@ -36,7 +36,7 @@ class Send
     private $text;
 
     /**
-     * @var bool
+     * @var int
      *
      * @ORM\Column(name="priority", type="integer", nullable=false)
      */
@@ -100,18 +100,18 @@ class Send
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isPriority(): bool
+    public function getPriority(): int
     {
         return $this->priority;
     }
 
     /**
-     * @param bool $priority
+     * @param int $priority
      * @return Send
      */
-    public function setPriority(bool $priority): Send
+    public function setPriority(int $priority): Send
     {
         $this->priority = $priority;
 

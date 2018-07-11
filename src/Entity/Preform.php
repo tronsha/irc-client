@@ -5,12 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Send.
+ * Preform.
  *
- * @ORM\Entity(repositoryClass="\App\Repository\SendRepository")
- * @ORM\Table(name="send")
+ * @ORM\Entity(repositoryClass="\App\Repository\PreformRepository")
+ * @ORM\Table(name="preform")
  */
-class Send
+class Preform
 {
     /**
      * @var int
@@ -22,14 +22,14 @@ class Send
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="bot_id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="network", type="text", nullable=false)
      */
-    private $botId;
+    private $network;
 
     /**
-     * @var string|null
+     * @var string
      *
      * @ORM\Column(name="text", type="text", nullable=false)
      */
@@ -52,9 +52,9 @@ class Send
 
     /**
      * @param int $id
-     * @return Send
+     * @return Preform
      */
-    public function setId(int $id): Send
+    public function setId(int $id): Preform
     {
         $this->id = $id;
 
@@ -62,37 +62,37 @@ class Send
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getBotId(): int
+    public function getNetwork(): string
     {
-        return $this->botId;
+        return $this->network;
     }
 
     /**
-     * @param int $botId
-     * @return Send
+     * @param string $network
+     * @return Preform
      */
-    public function setBotId(int $botId): Send
+    public function setNetwork(string $network): Preform
     {
-        $this->botId = $botId;
+        $this->network = $network;
 
         return $this;
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }
 
     /**
-     * @param null|string $text
-     * @return Send
+     * @param string $text
+     * @return Preform
      */
-    public function setText(?string $text): Send
+    public function setText(?string $text): Preform
     {
         $this->text = $text;
 
@@ -109,9 +109,9 @@ class Send
 
     /**
      * @param int $priority
-     * @return Send
+     * @return Preform
      */
-    public function setPriority(int $priority): Send
+    public function setPriority(int $priority): Preform
     {
         $this->priority = $priority;
 

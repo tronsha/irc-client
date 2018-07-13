@@ -13,7 +13,7 @@ class PreformRepository extends EntityRepository
      * @param string $network
      * @return Preform[]|null
      */
-    public function getPreform(string $network): ?array
+    public function getPreformByNetwork(string $network): ?array
     {
         $qb = $this->createQueryBuilder('p')
             ->where('p.network = :network')

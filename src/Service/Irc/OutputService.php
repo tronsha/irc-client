@@ -75,6 +75,14 @@ class OutputService
     }
 
     /**
+     * @return PreformService
+     */
+    public function getPreformService(): PreformService
+    {
+        return $this->preformService;
+    }
+
+    /**
      * @param PreformService $preformService
      * @return OutputService
      */
@@ -159,7 +167,7 @@ class OutputService
 
     public function preform()
     {
-
+        $this->getPreformService()->preform();
     }
 
     public function handle()

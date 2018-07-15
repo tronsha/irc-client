@@ -3,7 +3,7 @@
 namespace App\Event\Irc;
 
 use App\Service\Irc\OutputService;
-use App\Service\IrcService;
+use App\Service\Irc\ConnectionService;
 use App\Service\NickService;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -11,7 +11,7 @@ abstract class AbstractIrcEvent extends Event
 {
     protected $data;
 
-    private $ircService;
+    private $connectionService;
 
     private $outputService;
 
@@ -23,22 +23,22 @@ abstract class AbstractIrcEvent extends Event
     }
 
     /**
-     * @param mixed $ircService
+     * @param mixed $connectionService
      * @return AbstractIrcEvent
      */
-    public function setIrcService($ircService): Event
+    public function setConnectionService($connectionService): Event
     {
-        $this->ircService = $ircService;
+        $this->connectionService = $connectionService;
 
         return $this;
     }
 
     /**
-     * @return IrcService
+     * @return ConnectionService
      */
-    public function getIrcService(): IrcService
+    public function getConnectionService(): ConnectionService
     {
-        return $this->ircService;
+        return $this->connectionService;
     }
 
     /**

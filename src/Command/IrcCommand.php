@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Command;
 
 use App\Service\ConsoleService;
-use App\Service\IrcService;
+use App\Service\Irc\ConnectionService;
 use App\Service\Irc\InputService;
 use App\Service\Irc\OutputService;
 use Exception;
@@ -21,9 +21,9 @@ class IrcCommand extends ContainerAwareCommand
     private $consoleService;
 
     /**
-     * @var IrcService
+     * @var ConnectionService
      */
-    private $ircService;
+    private $connectionService;
 
     /**
      * @var InputService
@@ -98,20 +98,20 @@ class IrcCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return IrcService
+     * @return ConnectionService
      */
-    public function getIrcService(): IrcService
+    public function getConnectionService(): ConnectionService
     {
-        return $this->ircService;
+        return $this->connectionService;
     }
 
     /**
-     * @param IrcService $ircService
+     * @param ConnectionService $connectionService
      * @return IrcCommand
      */
-    public function setIrcService(IrcService $ircService): IrcCommand
+    public function setConnectionService(ConnectionService $connectionService): IrcCommand
     {
-        $this->ircService = $ircService;
+        $this->connectionService = $connectionService;
 
         return $this;
     }
@@ -144,14 +144,14 @@ class IrcCommand extends ContainerAwareCommand
     }
 
     public function __construct(
-        IrcService $ircService,
+        ConnectionService $connectionService,
         ConsoleService $consoleService,
         InputService $inputService,
         OutputService $outputService
     ) {
         parent::__construct();
         $this->setConsoleService($consoleService);
-        $this->setIrcService($ircService);
+        $this->setConnectionService($connectionService);
         $this->setInputService($inputService);
         $this->setOutputService($outputService);
     }
@@ -177,13 +177,13 @@ class IrcCommand extends ContainerAwareCommand
 
     protected function connectToIrcServer()
     {
-        $this->setIrcServerConnection($this->getIrcService()->connectToIrcServer());
+        $this->setIrcServerConnection($this->getConnectionService()->connectToIrcServer());
     }
 
     protected function handleIrcInputAndOutput()
     {
         while (false === feof($this->getIrcServerConnection())) {
-            $inputFromServer = $this->getIrcService()->readFromIrcServer();
+            $inputFromServer = $this->getConnectionService()->readFromIrcServer();
             $this->getInputService()->handle($inputFromServer);
             $this->getOutputService()->handle();
         }

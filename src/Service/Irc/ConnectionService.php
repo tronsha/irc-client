@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Service\Irc;
 
 use App\Exception\CouldNotConnectException;
-use App\Service\Irc\OutputService;
 
-class IrcService
+class ConnectionService
 {
     private $ircServerName;
     private $ircServerPort;
@@ -21,9 +20,9 @@ class IrcService
 
     /**
      * @param OutputService $outputService
-     * @return IrcService
+     * @return ConnectionService
      */
-    public function setOutputService(OutputService $outputService): IrcService
+    public function setOutputService(OutputService $outputService): ConnectionService
     {
         $this->outputService = $outputService;
 

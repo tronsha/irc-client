@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service\Irc;
 
 use App\Service\ConsoleService;
-use App\Service\IrcService;
 use App\Service\PreformService;
 use App\Service\SendService;
 
@@ -17,9 +16,9 @@ class OutputService
     private $options = [];
 
     /**
-     * @var IrcService
+     * @var ConnectionService
      */
-    private $ircService;
+    private $connectionService;
 
     /**
      * @var ConsoleService
@@ -42,17 +41,17 @@ class OutputService
     private $active = false;
 
     public function __construct(
-        IrcService $ircService,
+        ConnectionService $connectionService,
         ConsoleService $consoleService,
         PreformService $preformService,
         SendService $sendService
     ) {
-        $this->setIrcService($ircService);
+        $this->setConnectionService($connectionService);
         $this->setConsoleService($consoleService);
         $this->setPreformService($preformService);
         $this->setSendService($sendService);
 
-        $ircService->setOutputService($this);
+        $connectionService->setOutputService($this);
     }
 
     /**
@@ -113,20 +112,20 @@ class OutputService
     }
 
     /**
-     * @return IrcService
+     * @return ConnectionService
      */
-    public function getIrcService(): IrcService
+    public function getConnectionService(): ConnectionService
     {
-        return $this->ircService;
+        return $this->connectionService;
     }
 
     /**
-     * @param IrcService $ircService
+     * @param ConnectionService $connectionService
      * @return OutputService
      */
-    public function setIrcService(IrcService $ircService): OutputService
+    public function setConnectionService(ConnectionService $connectionService): OutputService
     {
-        $this->ircService = $ircService;
+        $this->connectionService = $connectionService;
 
         return $this;
     }
@@ -183,7 +182,7 @@ class OutputService
 
     public function output($output)
     {
-        $this->getIrcService()->writeToIrcServer($output);
+        $this->getConnectionService()->writeToIrcServer($output);
         if (true === $this->getOptions()['verbose']) {
             $this->getConsoleService()->writeToConsole($output);
         }

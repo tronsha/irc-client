@@ -7,7 +7,6 @@ namespace App\Service\Irc;
 use App\EventListener\IrcEventSubscriber;
 use App\Exception\IrcException;
 use App\Service\ConsoleService;
-use App\Service\IrcService;
 use App\Service\NickService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -19,9 +18,9 @@ class InputService
     private $options = [];
 
     /**
-     * @var IrcService
+     * @var ConnectionService
      */
-    private $ircService;
+    private $ConnectionService;
 
     /**
      * @var OutputService
@@ -39,12 +38,12 @@ class InputService
     private $dispatcher;
 
     public function __construct(
-        IrcService $ircService,
+        ConnectionService $ConnectionService,
         ConsoleService $consoleService,
         OutputService $outputService,
         NickService $nickService
     ) {
-        $this->setIrcService($ircService);
+        $this->setConnectionService($ConnectionService);
         $this->setOutputService($outputService);
         $this->setConsoleService($consoleService);
 
@@ -87,20 +86,20 @@ class InputService
     }
 
     /**
-     * @return IrcService
+     * @return ConnectionService
      */
-    public function getIrcService(): IrcService
+    public function getConnectionService(): ConnectionService
     {
-        return $this->ircService;
+        return $this->ConnectionService;
     }
 
     /**
-     * @param IrcService $ircService
+     * @param ConnectionService $ConnectionService
      * @return InputService
      */
-    public function setIrcService(IrcService $ircService): InputService
+    public function setConnectionService(ConnectionService $ConnectionService): InputService
     {
-        $this->ircService = $ircService;
+        $this->ConnectionService = $ConnectionService;
 
         return $this;
     }

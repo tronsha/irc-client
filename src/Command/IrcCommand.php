@@ -10,6 +10,7 @@ use App\Service\Irc\InputService;
 use App\Service\Irc\OutputService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -159,11 +160,22 @@ class IrcCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('irc:run');
+        $this->addArgument('host',  InputArgument::OPTIONAL, 'Server Host?');
+        $this->addArgument('port', InputArgument::OPTIONAL, 'Server Port?');
+        $this->addArgument('password', InputArgument::OPTIONAL, 'Server Password?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            if (isset($input->getArguments()['host']) && isset($input->getArguments()['port'])) {
+                $this->getConnectionService()->setIrcServer(
+                    $input->getArguments()['host'],
+                    (int) $input->getArguments()['port'],
+                    $input->getArguments()['password']
+                );
+            }
+
             $this->getConsoleService()->setOutput($output);
             $this->getInputService()->setOptions($input->getOptions());
             $this->getOutputService()->setOptions($input->getOptions());

@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Preform;
 use App\Entity\Send;
+use App\Service\Irc\NetworkService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PreformService
@@ -16,12 +17,20 @@ class PreformService
     private $entityManager;
 
     /**
+     * @var NetworkService
+     */
+    private $networkService;
+
+
+    /**
      * PreformService constructor.
      * @param EntityManagerInterface $entityManager
+     * @param NetworkService $networkService
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, NetworkService $networkService)
     {
         $this->entityManager = $entityManager;
+        $this->networkService = $networkService;
     }
 
     /**
@@ -32,7 +41,7 @@ class PreformService
         $this->entityManager->beginTransaction();
         try {
             $preforms = $this->entityManager->getRepository(Preform::class);
-            foreach ($preforms->getPreformByNetwork('freenode') as $preform) {
+            foreach ($preforms->getPreformByNetwork($this->networkService->getNetwork()) as $preform) {
                 $send = new Send();
                 $send->setBotId(1);
                 $send->setText($preform->getText());

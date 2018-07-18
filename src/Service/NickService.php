@@ -6,6 +6,13 @@ namespace App\Service;
 
 class NickService
 {
+    private $nick;
+
+    public function setNick($nick)
+    {
+        $this->nick = $nick;
+    }
+
     public function getRandomNick()
     {
         $consonant = str_split('bcdfghjklmnpqrstvwxyz');

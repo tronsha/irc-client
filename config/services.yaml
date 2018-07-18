@@ -29,3 +29,7 @@ services:
     App\Service\Irc\ConnectionService:
         calls:
             - [setIrcServer, ['chat.freenode.net', 6667]]
+
+    App\Service\NickService:
+        calls:
+            - [setNick, ['chat.freenode.net', 6667]]

@@ -20,7 +20,7 @@ class InputService
     /**
      * @var ConnectionService
      */
-    private $ConnectionService;
+    private $connectionService;
 
     /**
      * @var OutputService
@@ -43,9 +43,9 @@ class InputService
         OutputService $outputService,
         NickService $nickService
     ) {
-        $this->setConnectionService($ConnectionService);
-        $this->setOutputService($outputService);
-        $this->setConsoleService($consoleService);
+        $this->connectionService = $ConnectionService;
+        $this->outputService = $outputService;
+        $this->consoleService = $consoleService;
 
         $eventSubscriber = new IrcEventSubscriber();
         $eventSubscriber->setOutputService($outputService);
@@ -85,69 +85,12 @@ class InputService
         return $this;
     }
 
-    /**
-     * @return ConnectionService
-     */
-    public function getConnectionService(): ConnectionService
-    {
-        return $this->ConnectionService;
-    }
-
-    /**
-     * @param ConnectionService $ConnectionService
-     * @return InputService
-     */
-    public function setConnectionService(ConnectionService $ConnectionService): InputService
-    {
-        $this->ConnectionService = $ConnectionService;
-
-        return $this;
-    }
-
-    /**
-     * @return OutputService
-     */
-    public function getOutputService(): OutputService
-    {
-        return $this->outputService;
-    }
-
-    /**
-     * @param OutputService $outputService
-     * @return InputService
-     */
-    public function setOutputService(OutputService $outputService): InputService
-    {
-        $this->outputService = $outputService;
-
-        return $this;
-    }
-
-    /**
-     * @return ConsoleService
-     */
-    public function getConsoleService(): ConsoleService
-    {
-        return $this->consoleService;
-    }
-
-    /**
-     * @param ConsoleService $consoleService
-     * @return InputService
-     */
-    public function setConsoleService(ConsoleService $consoleService): InputService
-    {
-        $this->consoleService = $consoleService;
-
-        return $this;
-    }
-
     public function handle($input)
     {
         try {
             if ('' !== $input) {
                 if (true === $this->getOptions()['verbose']) {
-                    $this->getConsoleService()->writeToConsole($input);
+                    $this->consoleService->writeToConsole($input);
                 }
                 if (':' === substr($input, 0, 1)) {
                     $this->colonInput($input);
@@ -156,7 +99,7 @@ class InputService
                 }
             }
         } catch (IrcException $exception) {
-            $this->getConsoleService()->writeToConsole('<error>' . $exception->getMessage() . '</error>');
+            $this->consoleService->writeToConsole('<error>' . $exception->getMessage() . '</error>');
         }
     }
 
@@ -188,7 +131,7 @@ class InputService
     {
         if (false !== strpos(strtoupper($input), 'PING')) {
             $output = str_replace('PING', 'PONG', $input);
-            $this->getOutputService()->output($output);
+            $this->outputService->output($output);
         }
         if (false !== strpos(strtoupper($input), 'ERROR')) {
             throw new IrcException($input);

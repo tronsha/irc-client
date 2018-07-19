@@ -46,10 +46,10 @@ class OutputService
         PreformService $preformService,
         SendService $sendService
     ) {
-        $this->setConnectionService($connectionService);
-        $this->setConsoleService($consoleService);
-        $this->setPreformService($preformService);
-        $this->setSendService($sendService);
+        $this->connectionService = $connectionService;
+        $this->consoleService = $consoleService;
+        $this->preformService = $preformService;
+        $this->sendService = $sendService;
 
         $connectionService->setOutputService($this);
     }
@@ -73,82 +73,6 @@ class OutputService
         return $this;
     }
 
-    /**
-     * @return PreformService
-     */
-    public function getPreformService(): PreformService
-    {
-        return $this->preformService;
-    }
-
-    /**
-     * @param PreformService $preformService
-     * @return OutputService
-     */
-    public function setPreformService(PreformService $preformService): OutputService
-    {
-        $this->preformService = $preformService;
-
-        return $this;
-    }
-
-    /**
-     * @return SendService
-     */
-    public function getSendService(): SendService
-    {
-        return $this->sendService;
-    }
-
-    /**
-     * @param SendService $sendService
-     * @return OutputService
-     */
-    public function setSendService(SendService $sendService): OutputService
-    {
-        $this->sendService = $sendService;
-
-        return $this;
-    }
-
-    /**
-     * @return ConnectionService
-     */
-    public function getConnectionService(): ConnectionService
-    {
-        return $this->connectionService;
-    }
-
-    /**
-     * @param ConnectionService $connectionService
-     * @return OutputService
-     */
-    public function setConnectionService(ConnectionService $connectionService): OutputService
-    {
-        $this->connectionService = $connectionService;
-
-        return $this;
-    }
-
-    /**
-     * @return ConsoleService
-     */
-    public function getConsoleService(): ConsoleService
-    {
-        return $this->consoleService;
-    }
-
-    /**
-     * @param ConsoleService $consoleService
-     * @return OutputService
-     */
-    public function setConsoleService(ConsoleService $consoleService): OutputService
-    {
-        $this->consoleService = $consoleService;
-
-        return $this;
-    }
-
     public function enableOutput()
     {
         $this->active = true;
@@ -166,13 +90,13 @@ class OutputService
 
     public function preform()
     {
-        $this->getPreformService()->preform();
+        $this->preformService->preform();
     }
 
     public function handle()
     {
         if ($this->isActive()) {
-            $send = $this->getSendService()->getSend();
+            $send = $this->sendService->getSend();
             if (is_string($send) && !empty($send)) {
                 sleep(1);
                 $this->output($send);
@@ -182,9 +106,9 @@ class OutputService
 
     public function output($output)
     {
-        $this->getConnectionService()->writeToIrcServer($output);
+        $this->connectionService->writeToIrcServer($output);
         if (true === $this->getOptions()['verbose']) {
-            $this->getConsoleService()->writeToConsole($output);
+            $this->consoleService->writeToConsole($output);
         }
     }
 }

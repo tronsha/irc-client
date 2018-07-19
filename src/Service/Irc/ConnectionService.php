@@ -8,15 +8,25 @@ use App\Exception\CouldNotConnectException;
 
 class ConnectionService
 {
-    private $ircServerName;
-    private $ircServerPort;
-    private $ircServerPassword;
     private $ircServerConnection;
 
     /**
      * @var OutputService
      */
     private $outputService;
+
+    /**
+     * @var NetworkService
+     */
+    private $networkService;
+
+    /**
+     * ConnectionService constructor.
+     * @param NetworkService $networkService
+     */
+    public function __construct(NetworkService $networkService) {
+        $this->networkService = $networkService;
+    }
 
     /**
      * @param OutputService $outputService
@@ -30,26 +40,6 @@ class ConnectionService
     }
 
     /**
-     * @return OutputService
-     */
-    public function getOutputService(): OutputService
-    {
-        return $this->outputService;
-    }
-
-    /**
-     * @param string      $server
-     * @param int         $port
-     * @param string|null $password
-     */
-    public function setIrcServer(string $server, int $port, string $password = null)
-    {
-        $this->ircServerName = $server;
-        $this->ircServerPort = $port;
-        $this->ircServerPassword = $password;
-    }
-
-    /**
      * @return resource
      *
      * @throws CouldNotConnectException
@@ -59,20 +49,24 @@ class ConnectionService
         $errorString = '';
         $errorNumber = 0;
 
-        $ircServerIp = gethostbyname($this->ircServerName);
+        $ircServerHost = $this->networkService->getIrcServerHost();
+        $ircServerPort = $this->networkService->getIrcServerPort();
+        $ircServerPassword = $this->networkService->getIrcServerPassword();
 
-        $this->ircServerConnection = fsockopen($ircServerIp, $this->ircServerPort, $errorNumber, $errorString);
+        $ircServerIp = gethostbyname($ircServerHost);
+
+        $this->ircServerConnection = fsockopen($ircServerIp, $ircServerPort, $errorNumber, $errorString);
 
         if (false === $this->ircServerConnection) {
             throw new CouldNotConnectException($errorString);
         }
 
-        if (null !== $this->ircServerPassword) {
-            $this->getOutputService()->output('PASS ' . $this->ircServerPassword);
+        if (null !== $ircServerPassword) {
+            $this->outputService->output('PASS ' . $ircServerPassword);
         }
 
-        $this->getOutputService()->output('USER Cerberus * * : Cerberus');
-        $this->getOutputService()->output('NICK Xoranu');
+        $this->outputService->output('USER Cerberus * * : Cerberus');
+        $this->outputService->output('NICK Xoranu');
 
         return $this->ircServerConnection;
     }

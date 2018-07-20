@@ -13,7 +13,12 @@ class NickService
         $this->nick = $nick;
     }
 
-    public function getRandomNick()
+    public function getNick()
+    {
+        return $this->nick;
+    }
+
+    private function generateRandomNick()
     {
         $consonant = str_split('bcdfghjklmnpqrstvwxyz');
         $vowel = str_split('aeiou');
@@ -23,5 +28,13 @@ class NickService
         }
 
         return ucfirst($nick);
+    }
+
+    public function getRandomNick()
+    {
+        $randomNick = $this->generateRandomNick();
+        $this->setNick($randomNick);
+
+        return $randomNick;
     }
 }

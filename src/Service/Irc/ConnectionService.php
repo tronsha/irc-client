@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Irc;
 
 use App\Exception\CouldNotConnectException;
+use App\Service\NickService;
 
 class ConnectionService
 {
@@ -21,11 +22,17 @@ class ConnectionService
     private $networkService;
 
     /**
+     * @var NickService
+     */
+    private $nickService;
+
+    /**
      * ConnectionService constructor.
      * @param NetworkService $networkService
      */
-    public function __construct(NetworkService $networkService) {
+    public function __construct(NetworkService $networkService, NickService $nickService) {
         $this->networkService = $networkService;
+        $this->nickService = $nickService;
     }
 
     /**
@@ -66,7 +73,7 @@ class ConnectionService
         }
 
         $this->outputService->output('USER Cerberus * * : Cerberus');
-        $this->outputService->output('NICK Xoranu');
+        $this->outputService->output('NICK ' . $this->nickService->getNick());
 
         return $this->ircServerConnection;
     }

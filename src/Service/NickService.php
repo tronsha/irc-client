@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Service;
 
@@ -15,6 +15,9 @@ class NickService
 
     public function getNick()
     {
+        if (null === $this->nick) {
+            return $this->getRandomNick();
+        }
         return $this->nick;
     }
 

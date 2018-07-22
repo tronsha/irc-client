@@ -98,7 +98,7 @@ class IrcCommand extends ContainerAwareCommand
             $this->outputService->setOptions($input->getOptions());
             $this->outputService->preform();
             $this->connectToIrcServer();
-            $this->handleIrcInputAndOutput();
+            $this->handleIrcInputOutput();
         } catch (Exception $exception) {
             $this->consoleService->writeToConsole('<error>' . $exception->getMessage() . '</error>');
         }
@@ -109,7 +109,7 @@ class IrcCommand extends ContainerAwareCommand
         $this->setIrcServerConnection($this->connectionService->connectToIrcServer());
     }
 
-    protected function handleIrcInputAndOutput()
+    protected function handleIrcInputOutput()
     {
         while (false === feof($this->getIrcServerConnection())) {
             $inputFromServer = $this->connectionService->readFromIrcServer();

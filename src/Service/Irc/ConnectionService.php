@@ -73,7 +73,7 @@ class ConnectionService
         }
 
         $this->outputService->output('USER Cerberus * * : Cerberus');
-        $this->outputService->output('NICK ' . $this->nickService->getNick());
+        $this->outputService->output('NICK Xoranu');
 
         return $this->ircServerConnection;
     }

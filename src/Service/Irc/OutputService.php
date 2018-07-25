@@ -108,7 +108,18 @@ class OutputService
     {
         $this->connectionService->writeToIrcServer($output);
         if (true === $this->getOptions()['verbose']) {
-            $this->consoleService->writeToConsole($output);
+            $time = (new \DateTime('now', new \DateTimeZone('Europe/Berlin')))->format('Y-m-d H:i:s ');
+            $this->consoleService->writeToConsole(
+                '<timestamp>' . $time . '</timestamp>' .
+                '<output>' . $this->consoleService->prepare(
+                    $output,
+                    true,
+                    null,
+                    true,
+                    true,
+                    strlen($time)
+                ) . '</output>'
+            );
         }
     }
 }

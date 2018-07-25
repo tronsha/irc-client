@@ -27,7 +27,7 @@ class ConsoleService
      */
     public function __construct(ConsoleFormatterService $consoleFormatterService)
     {
-        $this->consoleOutput = new ConsoleOutput();
+        $this->setOutput(new ConsoleOutput());
         $this->formatter = $consoleFormatterService;
     }
 
@@ -51,7 +51,7 @@ class ConsoleService
      */
     public function writeToConsole(string $text)
     {
-        $this->consoleOutput->writeln($this->prepare($text));
+        $this->consoleOutput->writeln($text);
     }
 
     /**

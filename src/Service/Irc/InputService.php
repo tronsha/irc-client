@@ -90,7 +90,18 @@ class InputService
         try {
             if ('' !== $input) {
                 if (true === $this->getOptions()['verbose']) {
-                    $this->consoleService->writeToConsole($input);
+                    $time = (new \DateTime('now', new \DateTimeZone('Europe/Berlin')))->format('Y-m-d H:i:s ');
+                    $this->consoleService->writeToConsole(
+                        '<timestamp>' . $time . '</timestamp>' .
+                        '<input>' . $this->consoleService->prepare(
+                            $input,
+                            true,
+                            null,
+                            true,
+                            true,
+                            strlen($time)
+                        ) . '</input>'
+                    );
                 }
                 if (':' === substr($input, 0, 1)) {
                     $this->colonInput($input);

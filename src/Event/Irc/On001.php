@@ -6,6 +6,6 @@ class On001 extends AbstractIrcEvent
 {
     public function on001()
     {
-        $this->getOutputService()->enableOutput();
+        $this->getBotService()->getOutputService()->enableOutput();
     }
 }

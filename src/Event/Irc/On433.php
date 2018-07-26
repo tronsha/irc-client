@@ -6,7 +6,7 @@ class On433 extends AbstractIrcEvent
 {
     public function on433()
     {
-        $randomNick = $this->getNickService()->getRandomNick();
-        $this->getOutputService()->output('NICK ' . $randomNick);
+        $randomNick = $this->getBotService()->getNickService()->getRandomNick();
+        $this->getBotService()->getOutputService()->output('NICK ' . $randomNick);
     }
 }

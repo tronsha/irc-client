@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Command;
 
+use App\Service\BotService;
 use App\Service\ConsoleService;
 use App\Service\Irc\ConnectionService;
 use App\Service\Irc\InputService;
@@ -17,6 +18,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class IrcCommand extends ContainerAwareCommand
 {
+    /**
+     * @var BotService
+     */
+    private $botService;
+
     /**
      * @var ConsoleService
      */
@@ -67,6 +73,7 @@ class IrcCommand extends ContainerAwareCommand
     }
 
     public function __construct(
+        BotService $botService,
         NetworkService $networkService,
         ConnectionService $connectionService,
         ConsoleService $consoleService,
@@ -74,6 +81,7 @@ class IrcCommand extends ContainerAwareCommand
         OutputService $outputService
     ) {
         parent::__construct();
+        $this->botService = $botService;
         $this->networkService = $networkService;
         $this->connectionService = $connectionService;
         $this->consoleService = $consoleService;

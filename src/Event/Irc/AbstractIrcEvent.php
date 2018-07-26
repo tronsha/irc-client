@@ -2,20 +2,14 @@
 
 namespace App\Event\Irc;
 
-use App\Service\Irc\OutputService;
-use App\Service\Irc\ConnectionService;
-use App\Service\NickService;
+use App\Service\BotService;
 use Symfony\Component\EventDispatcher\Event;
 
 abstract class AbstractIrcEvent extends Event
 {
     protected $data;
 
-    private $connectionService;
-
-    private $outputService;
-
-    private $nickService;
+    private $botService;
 
     public function __construct($data)
     {
@@ -23,60 +17,22 @@ abstract class AbstractIrcEvent extends Event
     }
 
     /**
-     * @param mixed $connectionService
-     * @return AbstractIrcEvent
-     */
-    public function setConnectionService($connectionService): Event
-    {
-        $this->connectionService = $connectionService;
-
-        return $this;
-    }
-
-    /**
-     * @return ConnectionService
-     */
-    public function getConnectionService(): ConnectionService
-    {
-        return $this->connectionService;
-    }
-
-    /**
-     * @param OutputService $outputService
+     * @param BotService $botService
      * @return Event
      */
-    public function setOutputService(OutputService $outputService): Event
+    public function setBotService(BotService $botService): Event
     {
-        $this->outputService = $outputService;
+        $this->botService = $botService;
 
         return $this;
     }
 
     /**
-     * @return OutputService
+     * @return BotService
      */
-    public function getOutputService(): OutputService
+    public function getBotService(): BotService
     {
-        return $this->outputService;
-    }
-
-    /**
-     * @param mixed $nickService
-     * @return Event
-     */
-    public function setNickService($nickService): Event
-    {
-        $this->nickService = $nickService;
-
-        return $this;
-    }
-
-    /**
-     * @return NickService
-     */
-    public function getNickService(): NickService
-    {
-        return $this->nickService;
+        return $this->botService;
     }
 
     public function handle()

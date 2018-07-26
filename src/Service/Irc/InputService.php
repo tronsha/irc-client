@@ -6,8 +6,8 @@ namespace App\Service\Irc;
 
 use App\EventListener\IrcEventSubscriber;
 use App\Exception\IrcException;
+use App\Service\BotService;
 use App\Service\ConsoleService;
-use App\Service\NickService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class InputService
@@ -37,19 +37,25 @@ class InputService
      */
     private $dispatcher;
 
+    /**
+     * InputService constructor.
+     * @param BotService $botService
+     * @param ConnectionService $connectionService
+     * @param ConsoleService $consoleService
+     * @param OutputService $outputService
+     */
     public function __construct(
-        ConnectionService $ConnectionService,
+        BotService $botService,
+        ConnectionService $connectionService,
         ConsoleService $consoleService,
-        OutputService $outputService,
-        NickService $nickService
+        OutputService $outputService
     ) {
-        $this->connectionService = $ConnectionService;
+        $this->connectionService = $connectionService;
         $this->outputService = $outputService;
         $this->consoleService = $consoleService;
 
         $eventSubscriber = new IrcEventSubscriber();
-        $eventSubscriber->setOutputService($outputService);
-        $eventSubscriber->setNickService($nickService);
+        $eventSubscriber->setBotService($botService);
 
         $this->dispatcher = new EventDispatcher();
         $this->dispatcher->addSubscriber($eventSubscriber);
@@ -85,6 +91,10 @@ class InputService
         return $this;
     }
 
+    /**
+     * @param $input
+     * @throws \Exception
+     */
     public function handle($input)
     {
         try {

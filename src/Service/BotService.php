@@ -8,6 +8,8 @@ use App\Service\Irc\OutputService;
 
 class BotService
 {
+    private $pid;
+
     private $outputService;
     private $nickService;
 
@@ -41,6 +43,14 @@ class BotService
     public function getNickService(): NickService
     {
         return $this->nickService;
+    }
+
+    public function getPid()
+    {
+        if (null === $this->pid) {
+            $this->pid = getmypid();
+        }
+        return $this->pid;
     }
 
 }

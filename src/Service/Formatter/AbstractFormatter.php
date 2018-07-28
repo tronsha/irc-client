@@ -13,6 +13,7 @@ abstract class AbstractFormatter
 
     /**
      * @param string $text
+     *
      * @return string
      */
     public function color(string $text): string
@@ -75,6 +76,7 @@ abstract class AbstractFormatter
      * @param string $delimiter
      * @param string $start
      * @param string $stop
+     *
      * @return string
      */
     protected function format(string $text, string $delimiter, string $start = null, string $stop = null): string

@@ -21,11 +21,11 @@ class PreformService
      */
     private $networkService;
 
-
     /**
      * PreformService constructor.
+     *
      * @param EntityManagerInterface $entityManager
-     * @param NetworkService $networkService
+     * @param NetworkService         $networkService
      */
     public function __construct(EntityManagerInterface $entityManager, NetworkService $networkService)
     {
@@ -50,9 +50,11 @@ class PreformService
             }
             $this->entityManager->flush();
             $this->entityManager->commit();
+
             return true;
         } catch (\Exception $exception) {
             $this->entityManager->rollBack();
+
             return false;
         }
     }

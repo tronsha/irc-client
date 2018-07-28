@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Command;
 
@@ -63,6 +63,7 @@ class IrcCommand extends ContainerAwareCommand
 
     /**
      * @param resource $ircServerConnection
+     *
      * @return IrcCommand
      */
     public function setIrcServerConnection($ircServerConnection): IrcCommand
@@ -85,14 +86,14 @@ class IrcCommand extends ContainerAwareCommand
         $this->networkService = $networkService;
         $this->connectionService = $connectionService;
         $this->consoleService = $consoleService;
-        $this->inputService  = $inputService;
+        $this->inputService = $inputService;
         $this->outputService = $outputService;
     }
 
     protected function configure()
     {
         $this->setName('irc:run');
-        $this->addArgument('host',  InputArgument::OPTIONAL, 'Server Host?');
+        $this->addArgument('host', InputArgument::OPTIONAL, 'Server Host?');
         $this->addArgument('port', InputArgument::OPTIONAL, 'Server Port?');
         $this->addArgument('password', InputArgument::OPTIONAL, 'Server Password?');
     }

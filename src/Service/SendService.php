@@ -21,6 +21,7 @@ class SendService
 
     /**
      * SendService constructor.
+     *
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(EntityManagerInterface $entityManager)

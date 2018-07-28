@@ -50,7 +50,7 @@ class BotService
         if (null === $this->pid) {
             $this->pid = getmypid();
         }
+
         return $this->pid;
     }
-
 }

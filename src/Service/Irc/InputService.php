@@ -39,10 +39,11 @@ class InputService
 
     /**
      * InputService constructor.
-     * @param BotService $botService
+     *
+     * @param BotService        $botService
      * @param ConnectionService $connectionService
-     * @param ConsoleService $consoleService
-     * @param OutputService $outputService
+     * @param ConsoleService    $consoleService
+     * @param OutputService     $outputService
      */
     public function __construct(
         BotService $botService,
@@ -71,6 +72,7 @@ class InputService
 
     /**
      * @param array $options
+     *
      * @return InputService
      */
     public function setOptions(array $options): InputService
@@ -82,6 +84,7 @@ class InputService
 
     /**
      * @param array $options
+     *
      * @return InputService
      */
     public function addOptions(array $options): InputService
@@ -93,6 +96,7 @@ class InputService
 
     /**
      * @param $input
+     *
      * @throws \Exception
      */
     public function handle($input)

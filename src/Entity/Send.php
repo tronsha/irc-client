@@ -52,6 +52,7 @@ class Send
 
     /**
      * @param int $id
+     *
      * @return Send
      */
     public function setId(int $id): Send
@@ -71,6 +72,7 @@ class Send
 
     /**
      * @param int $botId
+     *
      * @return Send
      */
     public function setBotId(int $botId): Send
@@ -90,6 +92,7 @@ class Send
 
     /**
      * @param null|string $text
+     *
      * @return Send
      */
     public function setText(?string $text): Send
@@ -109,6 +112,7 @@ class Send
 
     /**
      * @param int $priority
+     *
      * @return Send
      */
     public function setPriority(int $priority): Send

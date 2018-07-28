@@ -23,6 +23,7 @@ class ConsoleService
 
     /**
      * ConsoleService constructor.
+     *
      * @param ConsoleFormatterService $consoleFormatterService
      */
     public function __construct(ConsoleFormatterService $consoleFormatterService)
@@ -33,6 +34,7 @@ class ConsoleService
 
     /**
      * @param ConsoleOutput $output
+     *
      * @return $this
      */
     public function setOutput(ConsoleOutput $output)
@@ -47,6 +49,7 @@ class ConsoleService
 
     /**
      * @param string $text
+     *
      * @throws \Exception
      */
     public function writeToConsole(string $text)
@@ -56,6 +59,7 @@ class ConsoleService
 
     /**
      * @param string $text
+     *
      * @return string
      */
     public function escape(string $text): string
@@ -65,12 +69,14 @@ class ConsoleService
 
     /**
      * @param string $text
-     * @param bool $escape
-     * @param null $length
-     * @param bool $break
-     * @param bool $wordwrap
-     * @param int $offset
+     * @param bool   $escape
+     * @param null   $length
+     * @param bool   $break
+     * @param bool   $wordwrap
+     * @param int    $offset
+     *
      * @return string
+     *
      * @throws \Exception
      */
     public function prepare(
@@ -99,8 +105,9 @@ class ConsoleService
 
     /**
      * @param string $char
-     * @param int $count
-     * @param bool $ignore
+     * @param int    $count
+     * @param bool   $ignore
+     *
      * @return string
      */
     public function count(string $char, int &$count, bool &$ignore): string
@@ -109,7 +116,7 @@ class ConsoleService
             $ignore = true;
         }
         if (!$ignore) {
-            $count++;
+            ++$count;
         }
         if ($ignore && 'm' === $char) {
             $ignore = false;
@@ -120,11 +127,13 @@ class ConsoleService
 
     /**
      * @param string $text
-     * @param int $length
-     * @param bool $break
-     * @param bool $wordwrap
-     * @param int $offset
+     * @param int    $length
+     * @param bool   $break
+     * @param bool   $wordwrap
+     * @param int    $offset
+     *
      * @return string
+     *
      * @throws \Exception
      */
     protected function build(string $text, int $length, bool $break, bool $wordwrap, int $offset): string
@@ -151,6 +160,7 @@ class ConsoleService
 
     /**
      * @param string $text
+     *
      * @return int
      */
     protected function len(string $text): int
@@ -160,10 +170,12 @@ class ConsoleService
 
     /**
      * @param string $text
-     * @param int $length
+     * @param int    $length
      * @param string $break
-     * @param bool $cut
+     * @param bool   $cut
+     *
      * @throws \Exception
+     *
      * @return string
      */
     protected function wordwrap(string $text, int $length = 80, string $break = PHP_EOL, bool $cut = true): string
@@ -186,13 +198,13 @@ class ConsoleService
                 foreach ($wordArray as $word) {
                     $wordLength = $this->len($word);
                     $output[$lineCount] = trim($output[$lineCount]);
-                    $lineCount++;
+                    ++$lineCount;
                     $count = $wordLength + 1;
                     $output[$lineCount] = $word . ' ';
                 }
             } else {
                 $output[$lineCount] = trim($output[$lineCount]);
-                $lineCount++;
+                ++$lineCount;
                 $count = $wordLength + 1;
                 $output[$lineCount] = $word . ' ';
             }
@@ -203,9 +215,11 @@ class ConsoleService
 
     /**
      * @param string $text
-     * @param int $length
+     * @param int    $length
      * @param string $end
+     *
      * @throws \Exception
+     *
      * @return string
      */
     protected function split(string $text, int $length = 80, string $end = PHP_EOL): string
@@ -218,7 +232,7 @@ class ConsoleService
         $ignore = false;
         $len = mb_strlen($text);
         $textArray = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
-        for ($i = 0; $i < $len; $i++) {
+        for ($i = 0; $i < $len; ++$i) {
             $output .= $this->count($textArray[$i], $count, $ignore);
             if ($count === $length) {
                 $count = 0;
@@ -231,8 +245,10 @@ class ConsoleService
 
     /**
      * @param string $text
-     * @param int $length
+     * @param int    $length
+     *
      * @throws \Exception
+     *
      * @return string
      */
     protected function cut(string $text, int $length): string
@@ -245,7 +261,7 @@ class ConsoleService
         $ignore = false;
         $len = mb_strlen($text);
         $textArray = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
-        for ($i = 0; $i < $len; $i++) {
+        for ($i = 0; $i < $len; ++$i) {
             $output .= $this->count($textArray[$i], $count, $ignore);
             if ($count === $length) {
                 break;

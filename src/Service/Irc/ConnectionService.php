@@ -28,15 +28,18 @@ class ConnectionService
 
     /**
      * ConnectionService constructor.
+     *
      * @param NetworkService $networkService
      */
-    public function __construct(NetworkService $networkService, NickService $nickService) {
+    public function __construct(NetworkService $networkService, NickService $nickService)
+    {
         $this->networkService = $networkService;
         $this->nickService = $nickService;
     }
 
     /**
      * @param OutputService $outputService
+     *
      * @return ConnectionService
      */
     public function setOutputService(OutputService $outputService): ConnectionService

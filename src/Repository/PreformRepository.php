@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Repository;
 
@@ -11,6 +11,7 @@ class PreformRepository extends EntityRepository
 {
     /**
      * @param string $network
+     *
      * @return Preform[]|null
      */
     public function getPreformByNetwork(string $network): ?array

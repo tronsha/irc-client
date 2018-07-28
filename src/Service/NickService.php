@@ -27,7 +27,7 @@ class NickService
         $consonant = str_split('bcdfghjklmnpqrstvwxyz');
         $vowel = str_split('aeiou');
         $nick = '';
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             $nick .= $consonant[mt_rand(0, 20)] . $vowel[mt_rand(0, 4)];
         }
 

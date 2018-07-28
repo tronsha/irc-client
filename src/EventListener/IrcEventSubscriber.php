@@ -37,7 +37,7 @@ class IrcEventSubscriber implements EventSubscriberInterface
         $ircEventDirectory = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Event' . DIRECTORY_SEPARATOR . 'Irc');
         $ircEventFiles = glob($ircEventDirectory . DIRECTORY_SEPARATOR . 'On*.php');
         foreach ($ircEventFiles as $ircEventFile) {
-            $name = lcfirst(str_replace([$ircEventDirectory . DIRECTORY_SEPARATOR , '.php'], '', $ircEventFile));
+            $name = lcfirst(str_replace([$ircEventDirectory . DIRECTORY_SEPARATOR, '.php'], '', $ircEventFile));
             self::$subscribedEvents[$name] = 'handle';
         }
     }

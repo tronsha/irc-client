@@ -64,6 +64,7 @@ class OutputService
 
     /**
      * @param array $options
+     *
      * @return OutputService
      */
     public function setOptions(array $options): OutputService

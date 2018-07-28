@@ -18,6 +18,7 @@ abstract class AbstractIrcEvent extends Event
 
     /**
      * @param BotService $botService
+     *
      * @return Event
      */
     public function setBotService(BotService $botService): Event

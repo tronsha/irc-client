@@ -31,7 +31,7 @@ class NetworkService
             $this->host = $arguments['host'];
         }
         if (null !== $arguments['port']) {
-            $this->port = (int)$arguments['port'];
+            $this->port = (int) $arguments['port'];
         }
         if (null !== $arguments['password']) {
             $this->password = $arguments['password'];
@@ -56,6 +56,7 @@ class NetworkService
     public function getNetwork(): string
     {
         preg_match('/([^\.]+)\.[a-z]{2}[^\.]*$/', $this->host, $matches);
+
         return $matches[1];
     }
 

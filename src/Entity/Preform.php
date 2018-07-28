@@ -52,6 +52,7 @@ class Preform
 
     /**
      * @param int $id
+     *
      * @return Preform
      */
     public function setId(int $id): Preform
@@ -71,6 +72,7 @@ class Preform
 
     /**
      * @param string $network
+     *
      * @return Preform
      */
     public function setNetwork(string $network): Preform
@@ -90,6 +92,7 @@ class Preform
 
     /**
      * @param string $text
+     *
      * @return Preform
      */
     public function setText(?string $text): Preform
@@ -109,6 +112,7 @@ class Preform
 
     /**
      * @param int $priority
+     *
      * @return Preform
      */
     public function setPriority(int $priority): Preform

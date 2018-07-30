@@ -45,6 +45,11 @@ class BotService
         return $this->nickService;
     }
 
+    public function createBot()
+    {
+        // TODO create bot
+    }
+
     public function getPid()
     {
         if (null === $this->pid) {
@@ -52,5 +57,10 @@ class BotService
         }
 
         return $this->pid;
+    }
+
+    public function getNick()
+    {
+        return $this->nickService->getNick();
     }
 }

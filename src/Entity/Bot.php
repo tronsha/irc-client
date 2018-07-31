@@ -21,6 +21,13 @@ class Bot
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="pid", type="integer", nullable=false)
+     */
+    private $pid;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -36,6 +43,26 @@ class Bot
     public function setId(int $id): Bot
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    /**
+     * @param int $pid
+     *
+     * @return Bot
+     */
+    public function setPid(int $pid): Bot
+    {
+        $this->pid = $pid;
 
         return $this;
     }

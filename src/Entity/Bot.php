@@ -28,6 +28,13 @@ class Bot
     private $pid;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="nick", type="string ", nullable=false)
+     */
+    private $nick;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -66,4 +73,24 @@ class Bot
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getNick(): string
+    {
+        return $this->nick;
+    }
+
+    /**
+     * @param string $nick
+     * @return Bot
+     */
+    public function setNick(string $nick): Bot
+    {
+        $this->nick = $nick;
+
+        return $this;
+    }
+
 }

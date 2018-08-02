@@ -98,7 +98,7 @@ class OutputService
     {
         if ($this->isActive()) {
             $send = $this->sendService->getSend();
-            if (is_string($send) && !empty($send)) {
+            if (true === is_string($send) && '' !== $send) {
                 sleep(1);
                 $this->output($send);
             }

@@ -6,10 +6,10 @@ namespace App\Command;
 
 use App\Service\BotService;
 use App\Service\ConsoleService;
-use App\Service\Irc\ConnectionService;
 use App\Service\Irc\InputService;
 use App\Service\Irc\NetworkService;
 use App\Service\Irc\OutputService;
+use App\Service\IrcService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -24,14 +24,14 @@ class IrcCommand extends ContainerAwareCommand
     private $botService;
 
     /**
+     * @var IrcService
+     */
+    private $ircService;
+
+    /**
      * @var ConsoleService
      */
     private $consoleService;
-
-    /**
-     * @var ConnectionService
-     */
-    private $connectionService;
 
     /**
      * @var InputService
@@ -49,42 +49,26 @@ class IrcCommand extends ContainerAwareCommand
     private $networkService;
 
     /**
-     * @var resource
+     * IrcCommand constructor.
+     * @param BotService $botService
+     * @param IrcService $ircService
+     * @param NetworkService $networkService
+     * @param ConsoleService $consoleService
+     * @param InputService $inputService
+     * @param OutputService $outputService
      */
-    private $ircServerConnection;
-
-    /**
-     * @return resource
-     */
-    public function getIrcServerConnection()
-    {
-        return $this->ircServerConnection;
-    }
-
-    /**
-     * @param resource $ircServerConnection
-     *
-     * @return IrcCommand
-     */
-    public function setIrcServerConnection($ircServerConnection): IrcCommand
-    {
-        $this->ircServerConnection = $ircServerConnection;
-
-        return $this;
-    }
-
     public function __construct(
         BotService $botService,
+        IrcService $ircService,
         NetworkService $networkService,
-        ConnectionService $connectionService,
         ConsoleService $consoleService,
         InputService $inputService,
         OutputService $outputService
     ) {
         parent::__construct();
         $this->botService = $botService;
+        $this->ircService = $ircService;
         $this->networkService = $networkService;
-        $this->connectionService = $connectionService;
         $this->consoleService = $consoleService;
         $this->inputService = $inputService;
         $this->outputService = $outputService;
@@ -98,32 +82,26 @@ class IrcCommand extends ContainerAwareCommand
         $this->addArgument('password', InputArgument::OPTIONAL, 'Server Password?');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     * @throws Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->networkService->setArguments($input->getArguments());
             $this->consoleService->setOutput($output);
+
+            $this->networkService->setArguments($input->getArguments());
             $this->inputService->setOptions($input->getOptions());
             $this->outputService->setOptions($input->getOptions());
             $this->outputService->preform();
-            $this->connectToIrcServer();
-            $this->handleIrcInputOutput();
+            $this->ircService->connectToIrcServer();
+            $this->ircService->handleIrcInputOutput();
+
         } catch (Exception $exception) {
             $this->consoleService->writeToConsole('<error>' . $exception->getMessage() . '</error>');
-        }
-    }
-
-    protected function connectToIrcServer()
-    {
-        $this->setIrcServerConnection($this->connectionService->connectToIrcServer());
-    }
-
-    protected function handleIrcInputOutput()
-    {
-        while (false === feof($this->getIrcServerConnection())) {
-            $inputFromServer = $this->connectionService->readFromIrcServer();
-            $this->inputService->handle($inputFromServer);
-            $this->outputService->handle();
         }
     }
 }

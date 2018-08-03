@@ -9,7 +9,6 @@ use App\Service\ConsoleService;
 use App\Service\Irc\InputService;
 use App\Service\Irc\NetworkService;
 use App\Service\Irc\OutputService;
-use App\Service\IrcService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,11 +21,6 @@ class IrcCommand extends ContainerAwareCommand
      * @var BotService
      */
     private $botService;
-
-    /**
-     * @var IrcService
-     */
-    private $ircService;
 
     /**
      * @var ConsoleService
@@ -51,7 +45,6 @@ class IrcCommand extends ContainerAwareCommand
     /**
      * IrcCommand constructor.
      * @param BotService $botService
-     * @param IrcService $ircService
      * @param NetworkService $networkService
      * @param ConsoleService $consoleService
      * @param InputService $inputService
@@ -59,7 +52,6 @@ class IrcCommand extends ContainerAwareCommand
      */
     public function __construct(
         BotService $botService,
-        IrcService $ircService,
         NetworkService $networkService,
         ConsoleService $consoleService,
         InputService $inputService,
@@ -67,7 +59,6 @@ class IrcCommand extends ContainerAwareCommand
     ) {
         parent::__construct();
         $this->botService = $botService;
-        $this->ircService = $ircService;
         $this->networkService = $networkService;
         $this->consoleService = $consoleService;
         $this->inputService = $inputService;
@@ -92,14 +83,11 @@ class IrcCommand extends ContainerAwareCommand
     {
         try {
             $this->consoleService->setOutput($output);
-
             $this->networkService->setArguments($input->getArguments());
             $this->inputService->setOptions($input->getOptions());
             $this->outputService->setOptions($input->getOptions());
-            $this->outputService->preform();
-            $this->ircService->connectToIrcServer();
-            $this->ircService->handleIrcInputOutput();
-
+            $this->botService->create();
+            $this->botService->run();
         } catch (Exception $exception) {
             $this->consoleService->writeToConsole('<error>' . $exception->getMessage() . '</error>');
         }

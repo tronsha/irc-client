@@ -18,6 +18,11 @@ class InputService
     private $options = [];
 
     /**
+     * @var BotService
+     */
+    private $botService;
+
+    /**
      * @var ConnectionService
      */
     private $connectionService;
@@ -40,13 +45,11 @@ class InputService
     /**
      * InputService constructor.
      *
-     * @param BotService        $botService
      * @param ConnectionService $connectionService
      * @param ConsoleService    $consoleService
      * @param OutputService     $outputService
      */
     public function __construct(
-        BotService $botService,
         ConnectionService $connectionService,
         ConsoleService $consoleService,
         OutputService $outputService
@@ -54,12 +57,6 @@ class InputService
         $this->connectionService = $connectionService;
         $this->outputService = $outputService;
         $this->consoleService = $consoleService;
-
-        $eventSubscriber = new IrcEventSubscriber();
-        $eventSubscriber->setBotService($botService);
-
-        $this->dispatcher = new EventDispatcher();
-        $this->dispatcher->addSubscriber($eventSubscriber);
     }
 
     /**
@@ -92,6 +89,24 @@ class InputService
         $this->setOptions(array_merge($this->getOptions(), $options));
 
         return $this;
+    }
+
+    /**
+     * @param BotService $botService
+     */
+    public function setBotService(BotService $botService)
+    {
+        $this->botService = $botService;
+        $this->initEvents();
+    }
+
+    public function initEvents()
+    {
+        $eventSubscriber = new IrcEventSubscriber();
+        $eventSubscriber->setBotService($this->botService);
+
+        $this->dispatcher = new EventDispatcher();
+        $this->dispatcher->addSubscriber($eventSubscriber);
     }
 
     /**

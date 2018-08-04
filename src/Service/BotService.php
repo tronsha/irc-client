@@ -37,7 +37,7 @@ class BotService
         $this->inputService = $inputService;
         $this->outputService = $outputService;
         $this->nickService = $nickService;
-        $inputService->setBotService($this);
+        $inputService->initEvents($this);
     }
 
     public function setOutputService(OutputService $outputService): BotService

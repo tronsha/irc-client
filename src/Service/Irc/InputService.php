@@ -18,11 +18,6 @@ class InputService
     private $options = [];
 
     /**
-     * @var BotService
-     */
-    private $botService;
-
-    /**
      * @var ConnectionService
      */
     private $connectionService;
@@ -94,16 +89,10 @@ class InputService
     /**
      * @param BotService $botService
      */
-    public function setBotService(BotService $botService)
-    {
-        $this->botService = $botService;
-        $this->initEvents();
-    }
-
-    public function initEvents()
+    public function initEvents(BotService $botService)
     {
         $eventSubscriber = new IrcEventSubscriber();
-        $eventSubscriber->setBotService($this->botService);
+        $eventSubscriber->setBotService($botService);
 
         $this->dispatcher = new EventDispatcher();
         $this->dispatcher->addSubscriber($eventSubscriber);

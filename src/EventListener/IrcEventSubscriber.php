@@ -21,14 +21,9 @@ class IrcEventSubscriber implements EventSubscriberInterface
         return $this;
     }
 
-    public function getBotService(): BotService
-    {
-        return $this->botService;
-    }
-
     public function handle(Event $event)
     {
-        $event->setBotService($this->getBotService());
+        $event->setBotService($this->botService);
         $event->handle();
     }
 

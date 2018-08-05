@@ -4,12 +4,19 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Bot;
 use App\Service\Irc\InputService;
 use App\Service\Irc\OutputService;
+use Doctrine\ORM\EntityManagerInterface;
 
 class BotService
 {
     private $pid;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
 
     private $ircService;
     private $consoleService;
@@ -24,19 +31,22 @@ class BotService
      * @param InputService $inputService
      * @param OutputService $outputService
      * @param NickService $nickService
+     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         IrcService $ircService,
         ConsoleService $consoleService,
         InputService $inputService,
         OutputService $outputService,
-        NickService $nickService
+        NickService $nickService,
+        EntityManagerInterface $entityManager
     ) {
         $this->ircService = $ircService;
         $this->consoleService = $consoleService;
         $this->inputService = $inputService;
         $this->outputService = $outputService;
         $this->nickService = $nickService;
+        $this->entityManager = $entityManager;
         $inputService->initEvents($this);
     }
 
@@ -86,7 +96,22 @@ class BotService
 
     public function create()
     {
-        // TODO create bot
+        $this->entityManager->beginTransaction();
+        try {
+            $bot = new Bot();
+            $bot->setPid($this->getPid());
+            $bot->setNick($this->nickService->getNick());
+            $this->entityManager->persist($bot);
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+
+            return $bot->getId();
+        } catch (\Exception $exception) {
+            $this->entityManager->rollBack();
+
+            return null;
+        }
+
     }
 
     /**

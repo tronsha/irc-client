@@ -38,10 +38,11 @@ class IrcService
 
     /**
      * IrcService constructor.
-     * @param NetworkService $networkService
+     *
+     * @param NetworkService    $networkService
      * @param ConnectionService $connectionService
-     * @param InputService $inputService
-     * @param OutputService $outputService
+     * @param InputService      $inputService
+     * @param OutputService     $outputService
      */
     public function __construct(
         NetworkService $networkService,

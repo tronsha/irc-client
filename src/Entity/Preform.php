@@ -7,31 +7,31 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Preform.
  *
- * @ORM\Entity(repositoryClass="\App\Repository\PreformRepository")
  * @ORM\Table(name="preform")
+ * @ORM\Entity(repositoryClass="\App\Repository\PreformRepository")
  */
 class Preform
 {
     /**
      * @var int
      *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer", nullable=false)
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="network", type="text", nullable=false)
+     * @ORM\Column(name="network", type="text", length=0, nullable=false)
      */
     private $network;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="text", type="text", nullable=false)
+     * @ORM\Column(name="text", type="text", length=0, nullable=false)
      */
     private $text;
 
@@ -72,14 +72,10 @@ class Preform
 
     /**
      * @param string $network
-     *
-     * @return Preform
      */
-    public function setNetwork(string $network): Preform
+    public function setNetwork(string $network): void
     {
         $this->network = $network;
-
-        return $this;
     }
 
     /**
@@ -92,14 +88,10 @@ class Preform
 
     /**
      * @param string $text
-     *
-     * @return Preform
      */
-    public function setText(?string $text): Preform
+    public function setText(string $text): void
     {
         $this->text = $text;
-
-        return $this;
     }
 
     /**
@@ -112,13 +104,9 @@ class Preform
 
     /**
      * @param int $priority
-     *
-     * @return Preform
      */
-    public function setPriority(int $priority): Preform
+    public function setPriority(int $priority): void
     {
         $this->priority = $priority;
-
-        return $this;
     }
 }

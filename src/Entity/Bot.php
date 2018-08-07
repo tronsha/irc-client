@@ -8,29 +8,30 @@ use Doctrine\ORM\Mapping as ORM;
  * Bot.
  *
  * @ORM\Table(name="bot")
+ * @ORM\Entity
  */
 class Bot
 {
     /**
      * @var int
      *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer", nullable=false)
      */
     private $id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="pid", type="integer", nullable=false)
+     * @ORM\Column(name="pid", type="integer", nullable=false, options={"unsigned"=true})
      */
     private $pid;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="nick", type="string ", nullable=false)
+     * @ORM\Column(name="nick", type="string", length=255, nullable=true)
      */
     private $nick;
 
@@ -75,22 +76,22 @@ class Bot
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getNick(): string
+    public function getNick(): ?string
     {
         return $this->nick;
     }
 
     /**
-     * @param string $nick
+     * @param null|string $nick
+     *
      * @return Bot
      */
-    public function setNick(string $nick): Bot
+    public function setNick(?string $nick): Bot
     {
         $this->nick = $nick;
 
         return $this;
     }
-
 }

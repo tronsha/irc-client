@@ -12,6 +12,8 @@ class SendRepository extends EntityRepository
     public function getSend(): ?Send
     {
         $qb = $this->createQueryBuilder('s')
+//            ->where('p.bot_id = :bid')
+//            ->setParameter('bid', $bid)
             ->orderBy('s.priority', 'DESC')
             ->addOrderBy('s.id', 'ASC')
             ->getQuery()

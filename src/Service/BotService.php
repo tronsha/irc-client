@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class BotService
 {
+    private $id;
     private $pid;
 
     /**
@@ -26,11 +27,12 @@ class BotService
 
     /**
      * IrcCommand constructor.
-     * @param IrcService $ircService
-     * @param ConsoleService $consoleService
-     * @param InputService $inputService
-     * @param OutputService $outputService
-     * @param NickService $nickService
+     *
+     * @param IrcService             $ircService
+     * @param ConsoleService         $consoleService
+     * @param InputService           $inputService
+     * @param OutputService          $outputService
+     * @param NickService            $nickService
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(
@@ -77,6 +79,14 @@ class BotService
     /**
      * @return int
      */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return int
+     */
     public function getPid()
     {
         if (null === $this->pid) {
@@ -104,14 +114,14 @@ class BotService
             $this->entityManager->persist($bot);
             $this->entityManager->flush();
             $this->entityManager->commit();
+            $this->id =$bot->getId();
 
-            return $bot->getId();
+            return $this->id;
         } catch (\Exception $exception) {
             $this->entityManager->rollBack();
 
             return null;
         }
-
     }
 
     /**

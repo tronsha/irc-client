@@ -7,17 +7,17 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Send.
  *
- * @ORM\Entity(repositoryClass="\App\Repository\SendRepository")
  * @ORM\Table(name="send")
+ * @ORM\Entity(repositoryClass="\App\Repository\SendRepository")
  */
 class Send
 {
     /**
      * @var int
      *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @ORM\Column(name="id", type="integer", nullable=false)
      */
     private $id;
 
@@ -29,9 +29,9 @@ class Send
     private $botId;
 
     /**
-     * @var string|null
+     * @var string
      *
-     * @ORM\Column(name="text", type="text", nullable=false)
+     * @ORM\Column(name="text", type="text", length=0, nullable=false)
      */
     private $text;
 
@@ -83,19 +83,19 @@ class Send
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }
 
     /**
-     * @param null|string $text
+     * @param string $text
      *
      * @return Send
      */
-    public function setText(?string $text): Send
+    public function setText(string $text): Send
     {
         $this->text = $text;
 

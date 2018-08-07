@@ -44,11 +44,12 @@ class IrcCommand extends ContainerAwareCommand
 
     /**
      * IrcCommand constructor.
-     * @param BotService $botService
+     *
+     * @param BotService     $botService
      * @param NetworkService $networkService
      * @param ConsoleService $consoleService
-     * @param InputService $inputService
-     * @param OutputService $outputService
+     * @param InputService   $inputService
+     * @param OutputService  $outputService
      */
     public function __construct(
         BotService $botService,
@@ -74,9 +75,11 @@ class IrcCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return int|null|void
+     *
      * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)

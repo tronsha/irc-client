@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Send;
+use App\Service\Bot\IdService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class SendService
@@ -15,6 +16,11 @@ class SendService
     private $entityManager;
 
     /**
+     * @var IdService
+     */
+    private $botIdService;
+
+    /**
      * @var string[]
      */
     private $queue = [];
@@ -23,10 +29,14 @@ class SendService
      * SendService constructor.
      *
      * @param EntityManagerInterface $entityManager
+     * @param IdService              $botIdService
      */
-    public function __construct(EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        IdService $botIdService
+    ) {
         $this->entityManager = $entityManager;
+        $this->botIdService = $botIdService;
     }
 
     public function getSend()
@@ -34,7 +44,8 @@ class SendService
         if (count($this->queue) > 0) {
             $send = array_shift($this->queue);
         } else {
-            $sendEntity = $this->entityManager->getRepository(Send::class)->getSend();
+            $botId = $this->botIdService->getId();
+            $sendEntity = $this->entityManager->getRepository(Send::class)->getSend($botId);
             if (null === $sendEntity) {
                 return null;
             }

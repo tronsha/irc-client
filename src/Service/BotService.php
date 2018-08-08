@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Bot;
+use App\Service\Bot\IdService;
 use App\Service\Irc\InputService;
 use App\Service\Irc\OutputService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class BotService
 {
-    private $id;
     private $pid;
 
     /**
@@ -24,6 +24,7 @@ class BotService
     private $inputService;
     private $outputService;
     private $nickService;
+    private $botIdService;
 
     /**
      * IrcCommand constructor.
@@ -33,6 +34,7 @@ class BotService
      * @param InputService           $inputService
      * @param OutputService          $outputService
      * @param NickService            $nickService
+     * @param IdService              $botIdService
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(
@@ -41,6 +43,7 @@ class BotService
         InputService $inputService,
         OutputService $outputService,
         NickService $nickService,
+        IdService $botIdService,
         EntityManagerInterface $entityManager
     ) {
         $this->ircService = $ircService;
@@ -48,6 +51,7 @@ class BotService
         $this->inputService = $inputService;
         $this->outputService = $outputService;
         $this->nickService = $nickService;
+        $this->botIdService = $botIdService;
         $this->entityManager = $entityManager;
         $inputService->initEvents($this);
     }
@@ -81,7 +85,7 @@ class BotService
      */
     public function getId()
     {
-        return $this->id;
+        return $this->botIdService->getId();
     }
 
     /**
@@ -114,9 +118,10 @@ class BotService
             $this->entityManager->persist($bot);
             $this->entityManager->flush();
             $this->entityManager->commit();
-            $this->id =$bot->getId();
+            $botId = $bot->getId();
+            $this->botIdService->setId($botId);
 
-            return $this->id;
+            return $botId;
         } catch (\Exception $exception) {
             $this->entityManager->rollBack();
 

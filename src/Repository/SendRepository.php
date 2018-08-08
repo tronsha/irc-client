@@ -9,11 +9,11 @@ use Doctrine\ORM\EntityRepository;
 
 class SendRepository extends EntityRepository
 {
-    public function getSend(): ?Send
+    public function getSend($botId): ?Send
     {
         $qb = $this->createQueryBuilder('s')
-//            ->where('p.bot_id = :bid')
-//            ->setParameter('bid', $bid)
+            ->where('s.botId = :bid')
+            ->setParameter('bid', $botId)
             ->orderBy('s.priority', 'DESC')
             ->addOrderBy('s.id', 'ASC')
             ->getQuery()

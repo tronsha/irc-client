@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Service\Irc;
 
+use App\Entity\Irc;
 use App\EventListener\IrcEventSubscriber;
 use App\Exception\IrcException;
+use App\Service\Bot\IdService;
 use App\Service\BotService;
 use App\Service\ConsoleService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class InputService
@@ -16,6 +19,11 @@ class InputService
      * @var array
      */
     private $options = [];
+
+    /**
+     * @var IdService
+     */
+    private $botIdService;
 
     /**
      * @var ConnectionService
@@ -38,20 +46,31 @@ class InputService
     private $dispatcher;
 
     /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
      * InputService constructor.
      *
-     * @param ConnectionService $connectionService
-     * @param ConsoleService    $consoleService
-     * @param OutputService     $outputService
+     * @param IdService              $botIdService
+     * @param ConnectionService      $connectionService
+     * @param ConsoleService         $consoleService
+     * @param OutputService          $outputService
+     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
+        IdService $botIdService,
         ConnectionService $connectionService,
         ConsoleService $consoleService,
-        OutputService $outputService
+        OutputService $outputService,
+        EntityManagerInterface $entityManager
     ) {
+        $this->botIdService = $botIdService;
         $this->connectionService = $connectionService;
         $this->outputService = $outputService;
         $this->consoleService = $consoleService;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -107,6 +126,19 @@ class InputService
     {
         try {
             if ('' !== $input) {
+                $this->entityManager->beginTransaction();
+                try {
+                    $irc = new Irc();
+                    $irc->setBotId($this->botIdService->getId())
+                        ->setDirection(1)
+                        ->setText($input)
+                        ->setTime(new \DateTime('now'));
+                    $this->entityManager->persist($irc);
+                    $this->entityManager->flush();
+                    $this->entityManager->commit();
+                } catch (\Exception $exception) {
+                    $this->entityManager->rollBack();
+                }
                 if (true === $this->getOptions()['verbose']) {
                     $time = (new \DateTime('now', new \DateTimeZone('Europe/Berlin')))->format('Y-m-d H:i:s ');
                     $this->consoleService->writeToConsole(

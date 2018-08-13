@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Test\Service;
+
+use App\Service\CronService;
 
 class CronServiceTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +12,7 @@ class CronServiceTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->cron = new Cron();
+        $this->cron = new CronService();
     }
 
     protected function tearDown()

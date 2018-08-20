@@ -49,11 +49,11 @@ class CronService
         $cronDayOfWeek = $this->dowNameToNumber($cronDayOfWeek);
         $cronMonth = $this->monthNameToNumber($cronMonth);
         $cronDayOfWeek = (7 === intval($cronDayOfWeek) ? 0 : $cronDayOfWeek);
-        $cronMinute = ('*' !== $cronMinute ? $this->prepare($cronMinute, 0, 59) : $cronMinute);
-        $cronHour = ('*' !== $cronHour ? $this->prepare($cronHour, 0, 23) : $cronHour);
-        $cronDayOfMonth = ('*' !== $cronDayOfMonth ? $this->prepare($cronDayOfMonth, 1, 31) : $cronDayOfMonth);
-        $cronMonth = ('*' !== $cronMonth ? $this->prepare($cronMonth, 1, 12) : $cronMonth);
-        $cronDayOfWeek = ('*' !== $cronDayOfWeek ? $this->prepare($cronDayOfWeek, 0, 6) : $cronDayOfWeek);
+        $cronMinute = ('*' !== $cronMinute ? $this->prepare((string) $cronMinute, 0, 59) : $cronMinute);
+        $cronHour = ('*' !== $cronHour ? $this->prepare((string) $cronHour, 0, 23) : $cronHour);
+        $cronDayOfMonth = ('*' !== $cronDayOfMonth ? $this->prepare((string) $cronDayOfMonth, 1, 31) : $cronDayOfMonth);
+        $cronMonth = ('*' !== $cronMonth ? $this->prepare((string) $cronMonth, 1, 12) : $cronMonth);
+        $cronDayOfWeek = ('*' !== $cronDayOfWeek ? $this->prepare((string) $cronDayOfWeek, 0, 6) : $cronDayOfWeek);
         if (
             (
                 '*' === $cronMinute  || true === in_array($minute, $cronMinute, true)
@@ -94,7 +94,7 @@ class CronService
      * @param int $b
      * @return array
      */
-    public function prepare($string, $a, $b)
+    public function prepare(string $string, int $a, int $b): array
     {
         $values = [];
         if (false !== strpos($string, ',')) {

@@ -38,7 +38,7 @@ class CronService
      * @throws \Exception
      * @return bool
      */
-    public function compare($cronString, $minute, $hour, $dayOfMonth, $month, $dayOfWeek)
+    public function compare(string $cronString, $minute, $hour, $dayOfMonth, $month, $dayOfWeek): bool
     {
         $cronString = trim($cronString);
         $cronArray = explode(' ', $cronString);
@@ -131,7 +131,7 @@ class CronService
      * @param string $subject
      * @return string
      */
-    public function monthNameToNumber($subject)
+    public function monthNameToNumber(string $subject): string
     {
         $subject = strtolower($subject);
         $search = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
@@ -143,7 +143,7 @@ class CronService
      * @param string $subject
      * @return string
      */
-    public function dowNameToNumber($subject)
+    public function dowNameToNumber(string $subject): string
     {
         $subject = strtolower($subject);
         $search = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];

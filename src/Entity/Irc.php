@@ -47,7 +47,7 @@ class Irc
      *
      * @ORM\Column(name="time", type="datetime", length=255, nullable=false)
      */
-   private $time;
+    private $time;
 
     /**
      * @return int
@@ -59,6 +59,7 @@ class Irc
 
     /**
      * @param int $id
+     *
      * @return Irc
      */
     public function setId(int $id): Irc
@@ -78,6 +79,7 @@ class Irc
 
     /**
      * @param int $botId
+     *
      * @return Irc
      */
     public function setBotId(int $botId): Irc
@@ -97,6 +99,7 @@ class Irc
 
     /**
      * @param int $direction
+     *
      * @return Irc
      */
     public function setDirection(int $direction): Irc
@@ -116,6 +119,7 @@ class Irc
 
     /**
      * @param string $text
+     *
      * @return Irc
      */
     public function setText(string $text): Irc
@@ -135,6 +139,7 @@ class Irc
 
     /**
      * @param \DateTime $time
+     *
      * @return Irc
      */
     public function setTime(\DateTime $time): Irc

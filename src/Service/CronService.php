@@ -17,6 +17,7 @@ class CronService
      * @param $dayOfMonth
      * @param $month
      * @param $dayOfWeek
+     *
      * @throws \Exception
      */
     public function run($minute, $hour, $dayOfMonth, $month, $dayOfWeek)
@@ -30,12 +31,14 @@ class CronService
 
     /**
      * @param string $cronString
-     * @param int $minute
-     * @param int $hour
-     * @param int $dayOfMonth
-     * @param int $month
-     * @param int $dayOfWeek
+     * @param int    $minute
+     * @param int    $hour
+     * @param int    $dayOfMonth
+     * @param int    $month
+     * @param int    $dayOfWeek
+     *
      * @throws \Exception
+     *
      * @return bool
      */
     public function compare(string $cronString, $minute, $hour, $dayOfMonth, $month, $dayOfWeek): bool
@@ -56,7 +59,7 @@ class CronService
         $cronDayOfWeek = ('*' !== $cronDayOfWeek ? $this->prepare((string) $cronDayOfWeek, 0, 6) : $cronDayOfWeek);
         if (
             (
-                '*' === $cronMinute  || true === in_array($minute, $cronMinute, true)
+                '*' === $cronMinute || true === in_array($minute, $cronMinute, true)
             ) && (
                 '*' === $cronHour || true === in_array($hour, $cronHour, true)
             ) && (
@@ -85,13 +88,15 @@ class CronService
         ) {
             return true;
         }
+
         return false;
     }
 
     /**
      * @param string $string
-     * @param int $a
-     * @param int $b
+     * @param int    $a
+     * @param int    $b
+     *
      * @return array
      */
     public function prepare(string $string, int $a, int $b): array
@@ -124,11 +129,13 @@ class CronService
                 $array[] = intval($value);
             }
         }
+
         return $array;
     }
 
     /**
      * @param string $subject
+     *
      * @return string
      */
     public function monthNameToNumber(string $subject): string
@@ -136,11 +143,13 @@ class CronService
         $subject = strtolower($subject);
         $search = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
         $replace = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
         return str_replace($search, $replace, $subject);
     }
 
     /**
      * @param string $subject
+     *
      * @return string
      */
     public function dowNameToNumber(string $subject): string
@@ -148,6 +157,7 @@ class CronService
         $subject = strtolower($subject);
         $search = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
         $replace = [0, 1, 2, 3, 4, 5, 6];
+
         return str_replace($search, $replace, $subject);
     }
 }

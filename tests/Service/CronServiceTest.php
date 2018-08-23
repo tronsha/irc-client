@@ -30,13 +30,13 @@ class CronServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param boolean $expected
+     * @param bool   $expected
      * @param string $cronString
-     * @param integer $minute
-     * @param integer $hour
-     * @param integer $dayOfMonth
-     * @param integer $month
-     * @param integer $dayOfWeek
+     * @param int    $minute
+     * @param int    $hour
+     * @param int    $dayOfMonth
+     * @param int    $month
+     * @param int    $dayOfWeek
      *
      * @dataProvider compareProvider
      */

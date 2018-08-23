@@ -8,6 +8,7 @@ use App\Service\Formatter\ConsoleFormatterService;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Output\StreamOutput;
 
 class ConsoleService
 {
@@ -33,11 +34,11 @@ class ConsoleService
     }
 
     /**
-     * @param ConsoleOutput $output
+     * @param StreamOutput $output
      *
      * @return $this
      */
-    public function setOutput(ConsoleOutput $output)
+    public function setOutput(StreamOutput $output)
     {
         $output->getFormatter()->setStyle('timestamp', new OutputFormatterStyle('yellow'));
         $output->getFormatter()->setStyle('input', new OutputFormatterStyle('cyan'));

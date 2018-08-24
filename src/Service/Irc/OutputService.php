@@ -145,7 +145,7 @@ class OutputService
                 '<output>' . $this->consoleService->prepare(
                     $output,
                     true,
-                    null,
+                    false,
                     true,
                     true,
                     strlen($time)

@@ -146,7 +146,7 @@ class InputService
                         '<input>' . $this->consoleService->prepare(
                             $input,
                             true,
-                            null,
+                            false,
                             true,
                             true,
                             strlen($time)

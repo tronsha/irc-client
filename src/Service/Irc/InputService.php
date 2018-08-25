@@ -143,14 +143,14 @@ class InputService
                     $time = (new \DateTime('now', new \DateTimeZone('Europe/Berlin')))->format('Y-m-d H:i:s ');
                     $this->consoleService->writeToConsole(
                         '<timestamp>' . $time . '</timestamp>' .
-                        '<input>' . $this->consoleService->prepare(
+                        $this->consoleService->prepare(
                             $input,
                             true,
-                            false,
+                            null,
                             true,
                             true,
                             strlen($time)
-                        ) . '</input>'
+                        )
                     );
                 }
                 if (':' === substr($input, 0, 1)) {

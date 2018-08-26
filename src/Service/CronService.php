@@ -7,29 +7,6 @@ namespace App\Service;
 class CronService
 {
     /**
-     * @var
-     */
-    private $cronJobs = [];
-
-    /**
-     * @param $minute
-     * @param $hour
-     * @param $dayOfMonth
-     * @param $month
-     * @param $dayOfWeek
-     *
-     * @throws \Exception
-     */
-    public function run($minute, $hour, $dayOfMonth, $month, $dayOfWeek)
-    {
-        foreach ($this->cronJobs as $cron) {
-            if (true === $this->compare($cron['cron'], $minute, $hour, $dayOfMonth, $month, $dayOfWeek)) {
-                $cron['object']->{$cron['method']}($cron['param']);
-            }
-        }
-    }
-
-    /**
      * @param string $cronString
      * @param int    $minute
      * @param int    $hour

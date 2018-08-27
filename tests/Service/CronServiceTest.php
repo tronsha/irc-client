@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Test\Service;
 
-use App\Service\CronService;
+use App\Service\Cron\CheckService as CronService;
 
 class CronServiceTest extends \PHPUnit\Framework\TestCase
 {

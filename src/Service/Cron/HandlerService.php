@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Service\Cron;
 
-class CronHandlerService
+class HandlerService
 {
     /**
-     * @var CronService
+     * @var CheckService
      */
-    private $cronService;
+    private $cronCheckService;
 
     /**
      * @var
@@ -18,11 +18,11 @@ class CronHandlerService
 
     /**
      * CronHandlerService constructor.
-     * @param CronService $cronService
+     * @param CheckService $cronCheckService
      */
-    public function __construct(CronService $cronService)
+    public function __construct(CheckService $cronCheckService)
     {
-        $this->cronService = $cronService;
+        $this->cronCheckService = $cronCheckService;
     }
 
     /**
@@ -37,7 +37,7 @@ class CronHandlerService
     public function run($minute, $hour, $dayOfMonth, $month, $dayOfWeek)
     {
         foreach ($this->cronJobs as $cron) {
-            if (true === $this->cronService->compare($cron['cron'], $minute, $hour, $dayOfMonth, $month, $dayOfWeek)) {
+            if (true === $this->cronCheckService->compare($cron['cron'], $minute, $hour, $dayOfMonth, $month, $dayOfWeek)) {
                 $cron['object']->{$cron['method']}($cron['param']);
             }
         }

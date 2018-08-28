@@ -26,18 +26,13 @@ class HandlerService
     }
 
     /**
-     * @param $minute
-     * @param $hour
-     * @param $dayOfMonth
-     * @param $month
-     * @param $dayOfWeek
-     *
      * @throws \Exception
      */
-    public function run($minute, $hour, $dayOfMonth, $month, $dayOfWeek)
+    public function run()
     {
+        $now = new \DateTime('now');
         foreach ($this->cronJobs as $cron) {
-            if (true === $this->cronCheckService->compare($cron['cron'], $minute, $hour, $dayOfMonth, $month, $dayOfWeek)) {
+            if (true === $this->cronCheckService->compare($cron['cron'], $now)) {
                 $cron['object']->{$cron['method']}($cron['param']);
             }
         }

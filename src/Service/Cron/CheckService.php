@@ -8,32 +8,37 @@ class CheckService
 {
     /**
      * @param string $cronString
-     * @param int    $minute
-     * @param int    $hour
-     * @param int    $dayOfMonth
-     * @param int    $month
-     * @param int    $dayOfWeek
+     * @param \DateTime $dateTime
      *
      * @throws \Exception
      *
      * @return bool
      */
-    public function compare(string $cronString, $minute, $hour, $dayOfMonth, $month, $dayOfWeek): bool
+    public function compare(string $cronString, \DateTime $dateTime): bool
     {
+        $minute = (int) $dateTime->format('i');
+        $hour = (int) $dateTime->format('G');
+        $month = (int) $dateTime->format('n');
+        $dayOfMonth = (int) $dateTime->format('j');
+        $dayOfWeek = (int) $dateTime->format('w');
+
         $cronString = trim($cronString);
         $cronArray = explode(' ', $cronString);
         if (5 !== count($cronArray)) {
             throw new Exception('a cron has an error');
         }
         list($cronMinute, $cronHour, $cronDayOfMonth, $cronMonth, $cronDayOfWeek) = $cronArray;
+
         $cronDayOfWeek = $this->dowNameToNumber($cronDayOfWeek);
         $cronMonth = $this->monthNameToNumber($cronMonth);
-        $cronDayOfWeek = (7 === intval($cronDayOfWeek) ? 0 : $cronDayOfWeek);
+        $cronDayOfWeek = (7 === (int) $cronDayOfWeek ? 0 : $cronDayOfWeek);
+
         $cronMinute = ('*' !== $cronMinute ? $this->prepare((string) $cronMinute, 0, 59) : $cronMinute);
         $cronHour = ('*' !== $cronHour ? $this->prepare((string) $cronHour, 0, 23) : $cronHour);
         $cronDayOfMonth = ('*' !== $cronDayOfMonth ? $this->prepare((string) $cronDayOfMonth, 1, 31) : $cronDayOfMonth);
         $cronMonth = ('*' !== $cronMonth ? $this->prepare((string) $cronMonth, 1, 12) : $cronMonth);
         $cronDayOfWeek = ('*' !== $cronDayOfWeek ? $this->prepare((string) $cronDayOfWeek, 0, 6) : $cronDayOfWeek);
+
         if (
             (
                 '*' === $cronMinute || true === in_array($minute, $cronMinute, true)
@@ -95,15 +100,15 @@ class CheckService
             }
             if (false !== strpos($value, '-')) {
                 list($min, $max) = explode('-', $value);
-                $min = intval($min);
-                $max = intval($max);
+                $min = (int) $min;
+                $max = (int) $max;
                 for ($i = $min, $j = 0; $i <= $max; $i++, $j++) {
                     if (0 === ($j % $steps)) {
                         $array[] = $i;
                     }
                 }
             } else {
-                $array[] = intval($value);
+                $array[] = (int) $value;
             }
         }
 

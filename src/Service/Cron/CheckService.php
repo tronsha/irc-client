@@ -8,20 +8,14 @@ class CheckService
 {
     /**
      * @param string $cronString
-     * @param \DateTime $dateTime
+     * @param \DateTime $time
      *
      * @throws \Exception
      *
      * @return bool
      */
-    public function compare(string $cronString, \DateTime $dateTime): bool
+    public function compare(string $cronString, \DateTime $time): bool
     {
-        $minute = (int) $dateTime->format('i');
-        $hour = (int) $dateTime->format('G');
-        $month = (int) $dateTime->format('n');
-        $dayOfMonth = (int) $dateTime->format('j');
-        $dayOfWeek = (int) $dateTime->format('w');
-
         $cronString = trim($cronString);
         $cronArray = explode(' ', $cronString);
         if (5 !== count($cronArray)) {
@@ -33,25 +27,25 @@ class CheckService
         $cronMonth = $this->monthNameToNumber($cronMonth);
         $cronDayOfWeek = (7 === (int) $cronDayOfWeek ? 0 : $cronDayOfWeek);
 
-        $cronMinute = ('*' !== $cronMinute ? $this->prepare((string) $cronMinute, 0, 59) : $cronMinute);
-        $cronHour = ('*' !== $cronHour ? $this->prepare((string) $cronHour, 0, 23) : $cronHour);
+        $cronMinute = $this->getCronMinute($cronString);
+        $cronHour = $this->getCronHour($cronString);
         $cronDayOfMonth = ('*' !== $cronDayOfMonth ? $this->prepare((string) $cronDayOfMonth, 1, 31) : $cronDayOfMonth);
         $cronMonth = ('*' !== $cronMonth ? $this->prepare((string) $cronMonth, 1, 12) : $cronMonth);
         $cronDayOfWeek = ('*' !== $cronDayOfWeek ? $this->prepare((string) $cronDayOfWeek, 0, 6) : $cronDayOfWeek);
 
         if (
             (
-                '*' === $cronMinute || true === in_array($minute, $cronMinute, true)
+                '*' === $cronMinute || true === in_array($this->getMinute($time), $cronMinute, true)
             ) && (
-                '*' === $cronHour || true === in_array($hour, $cronHour, true)
+                '*' === $cronHour || true === in_array($this->getHour($time), $cronHour, true)
             ) && (
-                '*' === $cronMonth || true === in_array($month, $cronMonth, true)
+                '*' === $cronMonth || true === in_array($this->getMonth($time), $cronMonth, true)
             ) && (
                 (
                     (
-                        '*' === $cronDayOfMonth || true === in_array($dayOfMonth, $cronDayOfMonth, true)
+                        '*' === $cronDayOfMonth || true === in_array($this->getDayOfMonth($time), $cronDayOfMonth, true)
                     ) && (
-                        '*' === $cronDayOfWeek || true === in_array($dayOfWeek, $cronDayOfWeek, true)
+                        '*' === $cronDayOfWeek || true === in_array($this->getDayOfWeek($time), $cronDayOfWeek, true)
                     )
                 ) || (
                     (
@@ -60,9 +54,9 @@ class CheckService
                         '*' !== $cronDayOfWeek
                     ) && (
                         (
-                            true === in_array($dayOfMonth, $cronDayOfMonth, true)
+                            true === in_array($this->getDayOfMonth($time), $cronDayOfMonth, true)
                         ) || (
-                            true === in_array($dayOfWeek, $cronDayOfWeek, true)
+                            true === in_array($this->getDayOfWeek($time), $cronDayOfWeek, true)
                         )
                     )
                 )
@@ -75,13 +69,95 @@ class CheckService
     }
 
     /**
+     * @param \DateTime $time
+     * @return int
+     */
+    private function getMinute(\DateTime $time): int
+    {
+        return (int) $time->format('i');
+    }
+
+    /**
+     * @param \DateTime $time
+     * @return int
+     */
+    private function getHour(\DateTime $time): int
+    {
+        return (int) $time->format('G');
+    }
+
+    /**
+     * @param \DateTime $time
+     * @return int
+     */
+    private function getMonth(\DateTime $time): int
+    {
+        return (int) $time->format('n');
+    }
+
+    /**
+     * @param \DateTime $time
+     * @return int
+     */
+    private function getDayOfMonth(\DateTime $time): int
+    {
+        return (int) $time->format('j');
+    }
+
+    /**
+     * @param \DateTime $time
+     * @return int
+     */
+    private function getDayOfWeek(\DateTime $time): int
+    {
+        return (int) $time->format('w');
+    }
+
+    /**
+     * @param string $cronString
+     * @return array
+     */
+    private function explodeCronString(string $cronString): array
+    {
+        return explode(' ', trim($cronString));
+    }
+
+    /**
+     * @param string $cronString
+     * @return array|string
+     */
+    private function getCronMinute(string $cronString)
+    {
+        $cronMinute = $this->explodeCronString($cronString)[0];
+        if ('*' !== $cronMinute) {
+            return '*';
+        }
+
+        return $this->prepare((string) $cronMinute, 0, 59);
+    }
+
+    /**
+     * @param string $cronString
+     * @return array|string
+     */
+    private function getCronHour(string $cronString)
+    {
+        $cronHour  = $this->explodeCronString($cronString)[1];
+        if ('*' !== $cronHour) {
+            return '*';
+        }
+
+        return $this->prepare((string) $cronHour, 0, 23);
+    }
+
+    /**
      * @param string $string
      * @param int    $a
      * @param int    $b
      *
      * @return array
      */
-    public function prepare(string $string, int $a, int $b): array
+    private function prepare(string $string, int $a, int $b): array
     {
         $values = [];
         if (false !== strpos($string, ',')) {
@@ -120,7 +196,7 @@ class CheckService
      *
      * @return string
      */
-    public function monthNameToNumber(string $subject): string
+    private function monthNameToNumber(string $subject): string
     {
         $subject = strtolower($subject);
         $search = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
@@ -134,7 +210,7 @@ class CheckService
      *
      * @return string
      */
-    public function dowNameToNumber(string $subject): string
+    private function dowNameToNumber(string $subject): string
     {
         $subject = strtolower($subject);
         $search = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];

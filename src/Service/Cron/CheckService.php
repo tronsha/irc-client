@@ -7,7 +7,7 @@ namespace App\Service\Cron;
 class CheckService
 {
     /**
-     * @param string $cronString
+     * @param string    $cronString
      * @param \DateTime $time
      *
      * @throws \Exception
@@ -24,13 +24,12 @@ class CheckService
         list($cronMinute, $cronHour, $cronDayOfMonth, $cronMonth, $cronDayOfWeek) = $cronArray;
 
         $cronDayOfWeek = $this->dowNameToNumber($cronDayOfWeek);
-        $cronMonth = $this->monthNameToNumber($cronMonth);
         $cronDayOfWeek = (7 === (int) $cronDayOfWeek ? 0 : $cronDayOfWeek);
 
         $cronMinute = $this->getCronMinute($cronString);
         $cronHour = $this->getCronHour($cronString);
+        $cronMonth = $this->getCronMonth($cronString);
         $cronDayOfMonth = ('*' !== $cronDayOfMonth ? $this->prepare((string) $cronDayOfMonth, 1, 31) : $cronDayOfMonth);
-        $cronMonth = ('*' !== $cronMonth ? $this->prepare((string) $cronMonth, 1, 12) : $cronMonth);
         $cronDayOfWeek = ('*' !== $cronDayOfWeek ? $this->prepare((string) $cronDayOfWeek, 0, 6) : $cronDayOfWeek);
 
         if (
@@ -70,6 +69,7 @@ class CheckService
 
     /**
      * @param \DateTime $time
+     *
      * @return int
      */
     private function getMinute(\DateTime $time): int
@@ -79,6 +79,7 @@ class CheckService
 
     /**
      * @param \DateTime $time
+     *
      * @return int
      */
     private function getHour(\DateTime $time): int
@@ -88,6 +89,7 @@ class CheckService
 
     /**
      * @param \DateTime $time
+     *
      * @return int
      */
     private function getMonth(\DateTime $time): int
@@ -97,6 +99,7 @@ class CheckService
 
     /**
      * @param \DateTime $time
+     *
      * @return int
      */
     private function getDayOfMonth(\DateTime $time): int
@@ -106,6 +109,7 @@ class CheckService
 
     /**
      * @param \DateTime $time
+     *
      * @return int
      */
     private function getDayOfWeek(\DateTime $time): int
@@ -115,6 +119,7 @@ class CheckService
 
     /**
      * @param string $cronString
+     *
      * @return array
      */
     private function explodeCronString(string $cronString): array
@@ -124,6 +129,7 @@ class CheckService
 
     /**
      * @param string $cronString
+     *
      * @return array|string
      */
     private function getCronMinute(string $cronString)
@@ -138,16 +144,33 @@ class CheckService
 
     /**
      * @param string $cronString
+     *
      * @return array|string
      */
     private function getCronHour(string $cronString)
     {
-        $cronHour  = $this->explodeCronString($cronString)[1];
+        $cronHour = $this->explodeCronString($cronString)[1];
         if ('*' !== $cronHour) {
             return '*';
         }
 
         return $this->prepare((string) $cronHour, 0, 23);
+    }
+
+    /**
+     * @param string $cronString
+     *
+     * @return array|string
+     */
+    private function getCronMonth(string $cronString)
+    {
+        $cronMonth = $this->explodeCronString($cronString)[3];
+        if ('*' !== $cronMonth) {
+            return '*';
+        }
+        $cronMonth = $this->monthNameToNumber($cronMonth);
+
+        return $this->prepare((string) $cronMonth, 1, 12);
     }
 
     /**

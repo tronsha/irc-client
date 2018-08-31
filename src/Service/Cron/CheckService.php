@@ -29,7 +29,7 @@ class CheckService
         $cronMinute = $this->getCronMinute($cronString);
         $cronHour = $this->getCronHour($cronString);
         $cronMonth = $this->getCronMonth($cronString);
-        $cronDayOfMonth = ('*' !== $cronDayOfMonth ? $this->prepare((string) $cronDayOfMonth, 1, 31) : $cronDayOfMonth);
+        $cronDayOfMonth = $this->getCronDayOfMonth($cronString);
         $cronDayOfWeek = ('*' !== $cronDayOfWeek ? $this->prepare((string) $cronDayOfWeek, 0, 6) : $cronDayOfWeek);
 
         if (
@@ -171,6 +171,21 @@ class CheckService
         $cronMonth = $this->monthNameToNumber($cronMonth);
 
         return $this->prepare((string) $cronMonth, 1, 12);
+    }
+
+    /**
+     * @param string $cronString
+     *
+     * @return array|string
+     */
+    private function getCronDayOfMonth(string $cronString)
+    {
+        $cronDayOfMonth = $this->explodeCronString($cronString)[2];
+        if ('*' !== $cronDayOfMonth) {
+            return '*';
+        }
+
+        return $this->prepare((string) $cronDayOfMonth, 1, 31);
     }
 
     /**

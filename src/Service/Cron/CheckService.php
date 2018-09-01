@@ -16,21 +16,11 @@ class CheckService
      */
     public function compare(string $cronString, \DateTime $time): bool
     {
-        $cronString = trim($cronString);
-        $cronArray = explode(' ', $cronString);
-        if (5 !== count($cronArray)) {
-            throw new Exception('a cron has an error');
-        }
-        list($cronMinute, $cronHour, $cronDayOfMonth, $cronMonth, $cronDayOfWeek) = $cronArray;
-
-        $cronDayOfWeek = $this->dowNameToNumber($cronDayOfWeek);
-        $cronDayOfWeek = (7 === (int) $cronDayOfWeek ? 0 : $cronDayOfWeek);
-
         $cronMinute = $this->getCronMinute($cronString);
         $cronHour = $this->getCronHour($cronString);
-        $cronMonth = $this->getCronMonth($cronString);
         $cronDayOfMonth = $this->getCronDayOfMonth($cronString);
-        $cronDayOfWeek = ('*' !== $cronDayOfWeek ? $this->prepare((string) $cronDayOfWeek, 0, 6) : $cronDayOfWeek);
+        $cronMonth = $this->getCronMonth($cronString);
+        $cronDayOfWeek = $this->getCronDayOfWeek($cronString);
 
         if (
             (
@@ -162,6 +152,21 @@ class CheckService
      *
      * @return array|string
      */
+    private function getCronDayOfMonth(string $cronString)
+    {
+        $cronDayOfMonth = $this->explodeCronString($cronString)[2];
+        if ('*' !== $cronDayOfMonth) {
+            return '*';
+        }
+
+        return $this->prepare((string) $cronDayOfMonth, 1, 31);
+    }
+
+    /**
+     * @param string $cronString
+     *
+     * @return array|string
+     */
     private function getCronMonth(string $cronString)
     {
         $cronMonth = $this->explodeCronString($cronString)[3];
@@ -178,14 +183,16 @@ class CheckService
      *
      * @return array|string
      */
-    private function getCronDayOfMonth(string $cronString)
+    private function getCronDayOfWeek(string $cronString)
     {
-        $cronDayOfMonth = $this->explodeCronString($cronString)[2];
-        if ('*' !== $cronDayOfMonth) {
+        $cronDayOfWeek = $this->explodeCronString($cronString)[4];
+        if ('*' !== $cronDayOfWeek) {
             return '*';
         }
+        $cronDayOfWeek = $this->dowNameToNumber($cronDayOfWeek);
+        $cronDayOfWeek = (7 === (int) $cronDayOfWeek ? 0 : $cronDayOfWeek);
 
-        return $this->prepare((string) $cronDayOfMonth, 1, 31);
+        return $this->prepare((string) $cronDayOfWeek, 0, 6);
     }
 
     /**

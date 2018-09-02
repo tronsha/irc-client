@@ -18,6 +18,7 @@ class HandlerService
 
     /**
      * CronHandlerService constructor.
+     *
      * @param CheckService $cronCheckService
      */
     public function __construct(CheckService $cronCheckService)

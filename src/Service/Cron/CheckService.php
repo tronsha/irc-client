@@ -14,8 +14,12 @@ class CheckService
      *
      * @return bool
      */
-    public function compare(string $cronString, \DateTime $time): bool
+    public function compare(string $cronString, \DateTime $time = null): bool
     {
+        if (null === $time) {
+            $time = new \DateTime('now');
+        }
+
         $cronMinute = $this->getCronMinute($cronString);
         $cronHour = $this->getCronHour($cronString);
         $cronDayOfMonth = $this->getCronDayOfMonth($cronString);

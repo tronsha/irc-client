@@ -30,17 +30,13 @@ class CronServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param bool   $expected
-     * @param string $cronString
-     * @param int    $minute
-     * @param int    $hour
-     * @param int    $dayOfMonth
-     * @param int    $month
-     * @param int    $dayOfWeek
+     * @param bool      $expected
+     * @param string    $cronString
+     * @param \DateTime $time
      *
      * @dataProvider compareProvider
      */
-    public function testCompare($expected, $cronString, $dateTime)
+    public function testCompare($expected, $cronString, $time)
     {
         $this->assertSame(
             $expected,
@@ -48,7 +44,7 @@ class CronServiceTest extends \PHPUnit\Framework\TestCase
                 $this->cron,
                 'compare',
                 $cronString,
-                $dateTime
+                $time
             )
         );
     }
@@ -73,6 +69,7 @@ class CronServiceTest extends \PHPUnit\Framework\TestCase
 //            [true, '15 12 * * *', 15, 12, 1, 1, 0],
             [true, '15 12 * * *', new \DateTime('2018-01-01 12:15:00')],
 //            [false, '30 * * * *', 15, 12, 1, 1, 0],
+            [false, '30 * * * *', new \DateTime('2018-01-01 12:15:00')],
 //            [false, '* 13 * * *', 15, 12, 1, 1, 0],
 //            [false, '* * 2 * *', 15, 12, 1, 1, 0],
 //            [false, '* * * 2 *', 15, 12, 1, 1, 0],

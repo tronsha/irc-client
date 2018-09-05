@@ -129,7 +129,7 @@ class CheckService
     private function getCronMinute(string $cronString)
     {
         $cronMinute = $this->explodeCronString($cronString)[0];
-        if ('*' !== $cronMinute) {
+        if ('*' === $cronMinute) {
             return '*';
         }
 
@@ -144,7 +144,7 @@ class CheckService
     private function getCronHour(string $cronString)
     {
         $cronHour = $this->explodeCronString($cronString)[1];
-        if ('*' !== $cronHour) {
+        if ('*' === $cronHour) {
             return '*';
         }
 
@@ -159,7 +159,7 @@ class CheckService
     private function getCronDayOfMonth(string $cronString)
     {
         $cronDayOfMonth = $this->explodeCronString($cronString)[2];
-        if ('*' !== $cronDayOfMonth) {
+        if ('*' === $cronDayOfMonth) {
             return '*';
         }
 
@@ -174,7 +174,7 @@ class CheckService
     private function getCronMonth(string $cronString)
     {
         $cronMonth = $this->explodeCronString($cronString)[3];
-        if ('*' !== $cronMonth) {
+        if ('*' === $cronMonth) {
             return '*';
         }
         $cronMonth = $this->monthNameToNumber($cronMonth);
@@ -190,7 +190,7 @@ class CheckService
     private function getCronDayOfWeek(string $cronString)
     {
         $cronDayOfWeek = $this->explodeCronString($cronString)[4];
-        if ('*' !== $cronDayOfWeek) {
+        if ('*' === $cronDayOfWeek) {
             return '*';
         }
         $cronDayOfWeek = $this->dowNameToNumber($cronDayOfWeek);

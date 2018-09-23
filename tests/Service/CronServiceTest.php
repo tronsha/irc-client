@@ -108,6 +108,7 @@ class CronServiceTest extends \PHPUnit\Framework\TestCase
 //            [true, '*/5 * * * *', 15, 12, 1, 1, 0],
             [true, '*/5 * * * *', new \DateTime('2018-01-01 12:15:00')],
 //            [false, '*/10 * * * *', 15, 12, 1, 1, 0],
+            [false, '*/10 * * * *', new \DateTime('2018-01-01 12:15:00')],
 //            [true, '0-30/5 * * * *', 15, 12, 1, 1, 0],
 //            [false, '30-55/5 * * * *', 15, 12, 1, 1, 0],
 //            [true, '2-32/5 * * * *', 17, 12, 1, 1, 0],

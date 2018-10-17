@@ -94,6 +94,6 @@ class ConnectionService
      */
     public function writeToIrcServer(string $text)
     {
-        fwrite($this->ircServerConnection, $text . PHP_EOL);
+        fwrite($this->ircServerConnection, $text . "\n");
     }
 }

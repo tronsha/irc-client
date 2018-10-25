@@ -52,7 +52,7 @@ class CronServiceTest extends \PHPUnit\Framework\TestCase
     public function compareProvider()
     {
         return [
-            [true, '* * * * *', new \DateTime('2018-01-01 12:15:00')],
+            [true, '* * * * *', new \DateTime('2015-10-21 16:29:00')],
             [true, '15 * * * *', new \DateTime('2018-01-01 12:15:00')],
             [true, '* 12 * * *', new \DateTime('2018-01-01 12:15:00')],
             [true, '* * 1 * *', new \DateTime('2018-01-01 12:15:00')],

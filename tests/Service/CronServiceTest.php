@@ -121,6 +121,7 @@ class CronServiceTest extends \PHPUnit\Framework\TestCase
             [false, '* * * OCT *', new \DateTime('2018-01-01 12:00:00')],
             [true, '* * * NOV *', new \DateTime('2018-11-01 12:00:00')],
             [false, '* * * NOV *', new \DateTime('2018-10-01 12:00:00')],
+            [true, '* * * DEC *', new \DateTime('2018-12-01 12:00:00')],
             [false, '* * * DEC *', new \DateTime('2018-10-01 12:00:00')],
         ];
     }

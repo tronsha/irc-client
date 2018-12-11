@@ -93,6 +93,8 @@ class CronServiceTest extends \PHPUnit\Framework\TestCase
             [false, '* * 1 * *', new \DateTime('2015-10-21 16:29:00')],
             [false, '29 * 1 * *', new \DateTime('2015-10-21 16:29:00')],
             [false, '30 * 21 * *', new \DateTime('2015-10-21 16:29:00')],
+            [false, '* 16 1 * *', new \DateTime('2015-10-21 16:29:00')],
+            [false, '* 4 21 * *', new \DateTime('2015-10-21 16:29:00')],
             [false, '* * * 1 *', new \DateTime('2015-10-21 16:29:00')],
             [false, '* * * * 1', new \DateTime('2015-10-21 16:29:00')],
             [true, '* * 21 * 1', new \DateTime('2015-10-21 16:29:00')],
